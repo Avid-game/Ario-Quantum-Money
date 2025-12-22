@@ -50,7 +50,28 @@
             // ۲. فعال‌سازی دوربین
             const video = document.getElementById('webcam');
             navigator.mediaDevices.getUserMedia({ video: {} })
-                .then(stream => {
+           // ۲. فعال‌سازی دوربین (نسخه اصلاح شده)
+        const video = document.getElementById('webcam');
+        const constraints = { 
+            video: { 
+                facingMode: "user",
+                width: { ideal: 1280 },
+                height: { ideal: 720 }
+            } 
+        };
+
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia(constraints);
+            video.srcObject = stream;
+            video.onloadedmetadata = () => {
+                video.play();
+                statusMsg.innerText = "AI Brain Active. Please Smile!";
+                detectSmile();
+            };
+        } catch (err) {
+            alert("Camera Error: " + err.message);
+            statusMsg.innerText = "Access Denied or Device Busy.";
+        }     .then(stream => {
                     video.srcObject = stream;
                     detectSmile();
                 })
