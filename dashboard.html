@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AQM Dashboard | Quantum Intelligence</title>
+    <style>
+        :root {
+            --primary-glow: #00f2fe;
+            --yt-red: #ff0000; --ig-pink: #e1306c; --tg-blue: #0088cc;
+        }
+        body {
+            background: radial-gradient(circle, #1a1a2e 0%, #0a0a0a 100%);
+            color: white; font-family: 'Segoe UI', sans-serif;
+            margin: 0; overflow: hidden; height: 100vh;
+        }
+        /* مغز مرکزی */
+        .central-brain {
+            position: absolute; top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px; height: 200px;
+            background: url('logo.jpg') no-repeat center;
+            background-size: contain;
+            border-radius: 50%;
+            box-shadow: 0 0 50px var(--primary-glow);
+            z-index: 10;
+        }
+        /* مدار پلتفرم‌ها */
+        .orbit {
+            position: absolute; top: 50%; left: 50%;
+            width: 500px; height: 500px;
+            border: 1px dashed rgba(255,255,255,0.1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .icon {
+            position: absolute; width: 60px; height: 60px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%; display: flex;
+            align-items: center; justify-content: center;
+            cursor: pointer; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2);
+        }
+        .icon:hover {
+            transform: scale(1.4);
+            box-shadow: 0 0 30px white;
+            z-index: 100;
+        }
+        /* چیدمان دایره‌ای آیکون‌ها */
+        .yt { top: 0%; left: 50%; transform: translateX(-50%); border-color: var(--yt-red); }
+        .ig { right: 0%; top: 50%; transform: translateY(-50%); border-color: var(--ig-pink); }
+        .tg { bottom: 0%; left: 50%; transform: translateX(-50%); border-color: var(--tg-blue); }
+        
+        .user-welcome {
+            position: absolute; top: 20px; right: 20px;
+            font-size: 18px; color: var(--primary-glow);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="user-welcome">Welcome, Quantum Citizen!</div>
+
+    <div class="central-brain"></div>
+
+    <div class="orbit">
+        <div class="icon yt" title="YouTube Content">🎬</div>
+        <div class="icon ig" title="Instagram Feed">📸</div>
+        <div class="icon tg" title="Telegram Social">✈️</div>
+        <div class="icon" style="left: 10%; top: 20%;" title="Music & Stories">🎵</div>
+        <div class="icon" style="right: 10%; top: 20%;" title="Games">🎮</div>
+    </div>
+
+    <script>
+        // در اینجا سیستم شناسایی کپی‌رایت و لایک/کامنت را در مراحل بعد اضافه می‌کنیم
+    </script>
+</body>
+</html>
