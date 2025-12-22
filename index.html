@@ -3,36 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ario Quantum Money | Global Justice Protocol</title>
+    <title>Ario Quantum Money | AI Justice</title>
+    <script defer src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.js"></script>
     <style>
-        body { background: #0a0a0a; color: white; font-family: 'Segoe UI', Tahoma, sans-serif; text-align: center; padding: 50px; margin: 0; }
-        .logo { width: 180px; border-radius: 50%; border: 3px solid #00f2fe; box-shadow: 0 0 25px rgba(0, 242, 254, 0.5); margin-bottom: 20px; }
-        h1 { color: #00f2fe; font-size: 2.5em; letter-spacing: 2px; }
-        p { color: #ccc; font-size: 1.1em; }
-        .protocol-box { background: rgba(255, 255, 255, 0.05); padding: 30px; border-radius: 20px; display: inline-block; margin-top: 40px; border: 1px solid #333; backdrop-filter: blur(10px); }
-        .highlight { color: #00f2fe; font-weight: bold; }
-        .btn-smile { background: linear-gradient(45deg, #00f2fe, #4facfe); border: none; padding: 18px 40px; color: black; font-weight: bold; border-radius: 50px; cursor: pointer; margin-top: 40px; font-size: 20px; transition: 0.3s; box-shadow: 0 10px 20px rgba(0, 242, 254, 0.3); }
-        .btn-smile:hover { transform: scale(1.05); box-shadow: 0 15px 30px rgba(0, 242, 254, 0.5); }
-        .lang-switch { position: absolute; top: 20px; right: 20px; color: #666; cursor: pointer; text-decoration: underline; }
+        body { background: #0a0a0a; color: white; font-family: 'Segoe UI', sans-serif; text-align: center; padding: 50px; margin: 0; }
+        .logo { width: 150px; border-radius: 50%; border: 3px solid #00f2fe; box-shadow: 0 0 20px rgba(0, 242, 254, 0.4); }
+        .protocol-box { background: rgba(255, 255, 255, 0.05); padding: 25px; border-radius: 20px; border: 1px solid #333; margin: 30px auto; max-width: 500px; }
+        .btn-smile { background: linear-gradient(45deg, #00f2fe, #4facfe); border: none; padding: 18px 40px; color: black; font-weight: bold; border-radius: 50px; cursor: pointer; font-size: 18px; }
+        #video-container { display: none; margin-top: 20px; position: relative; }
+        video { border-radius: 15px; border: 2px solid #00f2fe; width: 100%; max-width: 400px; }
+        #status-msg { margin-top: 15px; color: #00f2fe; font-weight: bold; }
     </style>
 </head>
 <body>
-    <div class="lang-switch">فارسی</div>
-    
-    <img src="logo.jpg" alt="AQM Intelligence Logo" class="logo">
-    
+    <img src="logo.jpg" alt="AQM Logo" class="logo">
     <h1>Ario Quantum Money ($AQM)</h1>
-    <p>The Future of Creative Finance & Quantum Intelligence</p>
 
     <div class="protocol-box">
         <h3>⚖️ Justice Protocol 70/15/10/5</h3>
-        <p><span class="highlight">70%</span> Community & Creativity Rewards</p>
-        <p>15% Tech Development | 10% Guarantors | 5% Core Team</p>
+        <p>Quantum-Verified Smile Confirmation</p>
     </div>
 
-    <br>
-    <button class="btn-smile">Smile-to-Sign (Coming Soon)</button>
+    <button id="start-btn" class="btn-smile" onclick="initAI()">Activate AI Smile-to-Sign</button>
 
-    <p style="margin-top: 60px; font-size: 0.8em; color: #444;">Connected to Database: <span style="color: #00ff00;">Active (ccusimbyepxhhjxbopbn)</span></p>
+    <div id="video-container">
+        <video id="webcam" autoplay muted playsinline></video>
+        <div id="status-msg">Initializing Quantum Brain...</div>
+    </div>
+
+    <script>
+        async function initAI() {
+            const startBtn = document.getElementById('start-btn');
+            const videoContainer = document.getElementById('video-container');
+            const statusMsg = document.getElementById('status-msg');
+            
+            startBtn.style.display = 'none';
+            videoContainer.style.display = 'block';
+
+            // ۱. بارگذاری مدل‌های هوش مصنوعی
+            statusMsg.innerText = "Loading AI Models...";
+            await face_api.nets.tinyFaceDetector.loadFromUri('https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/');
+            await face_api.nets.faceExpressionNet.loadFromUri('https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/');
+            
+            statusMsg.innerText = "AI Models Ready. Connecting to Camera...";
+            
+            // ۲. فعال‌سازی دوربین
+            const video = document.getElementById('webcam');
+            navigator.mediaDevices.getUserMedia({ video: {} })
+                .then(stream => {
+                    video.srcObject = stream;
+                    detectSmile();
+                })
+                .catch(err => {
+                    statusMsg.innerText = "Camera Access Denied!";
+                    console.error(err);
+                });
+        }
+
+        async function detectSmile() {
+            const video = document.getElementById('webcam');
+            const statusMsg = document.getElementById('status-msg');
+
+            setInterval(async () => {
+                const detections = await face_api.detectAllFaces(video, new face_api.TinyFaceDetectorOptions()).withFaceExpressions();
+                
+                if (detections && detections.length > 0) {
+                    const expressions = detections[0].expressions;
+                    if (expressions.happy > 0.8) {
+                        statusMsg.innerHTML = "<span style='color: #00ff00;'>SMILE DETECTED! Registering on Supabase...</span>";
+                        // در اینجا کد اتصال به فایل supabaseClient.js را در مرحله بعد فعال می‌کنیم
+                    } else {
+                        statusMsg.innerText = "Please Smile to Confirm Identity";
+                    }
+                }
+            }, 500);
+        }
+    </script>
 </body>
 </html>
