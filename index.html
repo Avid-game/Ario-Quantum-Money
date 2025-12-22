@@ -6,29 +6,29 @@
     <title>Ario Quantum Money | AI Justice</title>
     <script defer src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.js"></script>
     <style>
-        body { background: #0a0a0a; color: white; font-family: 'Segoe UI', sans-serif; text-align: center; padding: 50px; margin: 0; }
-        .logo { width: 150px; border-radius: 50%; border: 3px solid #00f2fe; box-shadow: 0 0 20px rgba(0, 242, 254, 0.4); }
-        .protocol-box { background: rgba(255, 255, 255, 0.05); padding: 25px; border-radius: 20px; border: 1px solid #333; margin: 30px auto; max-width: 500px; }
-        .btn-smile { background: linear-gradient(45deg, #00f2fe, #4facfe); border: none; padding: 18px 40px; color: black; font-weight: bold; border-radius: 50px; cursor: pointer; font-size: 18px; }
-        #video-container { display: none; margin-top: 20px; position: relative; }
-        video { border-radius: 15px; border: 2px solid #00f2fe; width: 100%; max-width: 400px; }
-        #status-msg { margin-top: 15px; color: #00f2fe; font-weight: bold; }
+        body { background: #0a0a0a; color: white; font-family: 'Segoe UI', sans-serif; text-align: center; padding: 20px; margin: 0; }
+        .logo { width: 120px; border-radius: 50%; border: 3px solid #00f2fe; margin-bottom: 10px; }
+        .protocol-box { background: rgba(255, 255, 255, 0.05); padding: 20px; border-radius: 15px; border: 1px solid #333; margin: 20px auto; max-width: 400px; }
+        .btn-smile { background: linear-gradient(45deg, #00f2fe, #4facfe); border: none; padding: 15px 30px; color: black; font-weight: bold; border-radius: 50px; cursor: pointer; font-size: 18px; }
+        #video-container { display: none; margin-top: 20px; }
+        video { border-radius: 15px; border: 2px solid #00f2fe; width: 100%; max-width: 400px; background: #000; }
+        #status-msg { margin-top: 15px; color: #00f2fe; font-weight: bold; min-height: 24px; }
     </style>
 </head>
 <body>
     <img src="logo.jpg" alt="AQM Logo" class="logo">
-    <h1>Ario Quantum Money ($AQM)</h1>
+    <h1>Ario Quantum Money</h1>
 
     <div class="protocol-box">
         <h3>⚖️ Justice Protocol 70/15/10/5</h3>
-        <p>Quantum-Verified Smile Confirmation</p>
+        <p>AI Smile Verification System</p>
     </div>
 
     <button id="start-btn" class="btn-smile" onclick="initAI()">Activate AI Smile-to-Sign</button>
 
     <div id="video-container">
         <video id="webcam" autoplay muted playsinline></video>
-        <div id="status-msg">Initializing Quantum Brain...</div>
+        <div id="status-msg">Ready to start...</div>
     </div>
 
     <script>
@@ -36,52 +36,39 @@
             const startBtn = document.getElementById('start-btn');
             const videoContainer = document.getElementById('video-container');
             const statusMsg = document.getElementById('status-msg');
-            
+            const video = document.getElementById('webcam');
+
             startBtn.style.display = 'none';
             videoContainer.style.display = 'block';
 
-            // ۱. بارگذاری مدل‌های هوش مصنوعی
-            statusMsg.innerText = "Loading AI Models...";
-            await face_api.nets.tinyFaceDetector.loadFromUri('https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/');
-            await face_api.nets.faceExpressionNet.loadFromUri('https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/');
-            
-            statusMsg.innerText = "AI Models Ready. Connecting to Camera...";
-            
-            // ۲. فعال‌سازی دوربین
-            const video = document.getElementById('webcam');
-            navigator.mediaDevices.getUserMedia({ video: {} })
-           // ۲. فعال‌سازی دوربین (نسخه اصلاح شده)
-        const video = document.getElementById('webcam');
-        const constraints = { 
-            video: { 
-                facingMode: "user",
-                width: { ideal: 1280 },
-                height: { ideal: 720 }
-            } 
-        };
-
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia(constraints);
-            video.srcObject = stream;
-            video.onloadedmetadata = () => {
-                video.play();
-                statusMsg.innerText = "AI Brain Active. Please Smile!";
-                detectSmile();
-            };
-        } catch (err) {
-            alert("Camera Error: " + err.message);
-            statusMsg.innerText = "Access Denied or Device Busy.";
-        }     .then(stream => {
-                    video.srcObject = stream;
-                    detectSmile();
-                })
-                .catch(err => {
-                    statusMsg.innerText = "Camera Access Denied!";
-                    console.error(err);
+            try {
+                statusMsg.innerText = "1. Loading AI Models...";
+                await face_api.nets.tinyFaceDetector.loadFromUri('https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/');
+                await face_api.nets.faceExpressionNet.loadFromUri('https://cdn.jsdelivr.net/npm/@vladmandic/face-api/model/');
+                
+                statusMsg.innerText = "2. Opening Camera...";
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: "user" } 
                 });
+                
+                video.srcObject = stream;
+                
+                // اطمینان از پخش ویدیو
+                video.onloadedmetadata = () => {
+                    video.play();
+                    statusMsg.innerText = "3. AI Brain Active. PLEASE SMILE!";
+                    startDetecting();
+                };
+
+            } catch (err) {
+                console.error(err);
+                statusMsg.style.color = "red";
+                statusMsg.innerText = "Error: " + err.message;
+                alert("Technical Issue: " + err.message);
+            }
         }
 
-        async function detectSmile() {
+        function startDetecting() {
             const video = document.getElementById('webcam');
             const statusMsg = document.getElementById('status-msg');
 
@@ -89,15 +76,17 @@
                 const detections = await face_api.detectAllFaces(video, new face_api.TinyFaceDetectorOptions()).withFaceExpressions();
                 
                 if (detections && detections.length > 0) {
-                    const expressions = detections[0].expressions;
-                    if (expressions.happy > 0.8) {
-                        statusMsg.innerHTML = "<span style='color: #00ff00;'>SMILE DETECTED! Registering on Supabase...</span>";
-                        // در اینجا کد اتصال به فایل supabaseClient.js را در مرحله بعد فعال می‌کنیم
+                    const happyValue = detections[0].expressions.happy;
+                    if (happyValue > 0.7) {
+                        statusMsg.innerHTML = "<span style='color: #00ff00;'>SMILE CONFIRMED! ✅</span>";
+                        // Next step: Connect to Supabase
                     } else {
-                        statusMsg.innerText = "Please Smile to Confirm Identity";
+                        statusMsg.innerText = "Face Found. Now, please Smile! 😊";
                     }
+                } else {
+                    statusMsg.innerText = "Position your face in front of the camera";
                 }
-            }, 500);
+            }, 600);
         }
     </script>
 </body>
