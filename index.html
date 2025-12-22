@@ -57,15 +57,25 @@
                 statusMsg.innerText = "3. AI Online. PLEASE SMILE!";
                 
                 setInterval(async () => {
-                    const detections = await api.detectAllFaces(video, new api.TinyFaceDetectorOptions()).withFaceExpressions();
-                    if (detections && detections.length > 0) {
-                        if (detections[0].expressions.happy > 0.7) {
-                            statusMsg.innerHTML = "<span style='color: #00ff00; font-size: 20px;'>SMILE DETECTED! ✅</span>";
-                        } else {
-                            statusMsg.innerText = "Face Detected. Now please SMILE!";
-                        }
+                const detections = await api.detectAllFaces(video, new api.TinyFaceDetectorOptions()).withFaceExpressions();
+                
+                if (detections && detections.length > 0) {
+                    const happyValue = detections[0].expressions.happy; // تعریف متغیر شادی
+                    
+                    if (happyValue > 0.7) {
+                        statusMsg.innerHTML = "<span style='color: #00ff00; font-size: 20px;'>SMILE CONFIRMED! ✅</span>";
+                        
+                        setTimeout(() => {
+                            const email = prompt("Welcome Quantum Citizen! Please enter your email to secure your identity:");
+                            if (email) {
+                                window.location.href = "dashboard.html";
+                            }
+                        }, 1500);
+                    } else {
+                        statusMsg.innerText = "Face Detected. Now please SMILE! 😊";
                     }
-                }, 500);
+                }
+            }, 500);
 
             } catch (err) {
                 statusMsg.style.color = "red";
