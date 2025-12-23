@@ -7,35 +7,28 @@
     <style>
         :root {
             --glow: #00f2fe; --bank-blue: #4facfe; --gold: #fcc419;
-            --yt: #ff0000; --ig: #e1306c; --tg: #0088cc;
+            --yt: #ff0000; --ig: #e1306c; --tg: #0088cc; --music: #a29bfe;
         }
         body {
             background: radial-gradient(circle at center, #1a1a2e 0%, #050505 100%);
             color: white; font-family: 'Segoe UI', sans-serif; margin: 0; height: 100vh; overflow: hidden;
         }
 
-        /* جایگاه بانک در گوشه امن */
-        .top-bank { 
-            position: absolute; top: 20px; right: 25px; 
-            text-align: center; z-index: 50; cursor: pointer;
-        }
+        /* بخش بانک */
+        .top-bank { position: absolute; top: 20px; right: 25px; text-align: center; z-index: 50; cursor: pointer; }
         .mini-ario-brain {
             width: 65px; height: 65px; background: rgba(79, 172, 254, 0.2);
             border-radius: 50%; border: 2px solid var(--bank-blue);
             display: flex; align-items: center; justify-content: center;
             box-shadow: 0 0 15px var(--bank-blue); transition: 0.3s;
         }
-        .mini-ario-brain:hover { transform: scale(1.1); box-shadow: 0 0 25px var(--bank-blue); }
-
-        /* پنجره بانک شیشه‌ای */
         .wallet-modal {
             display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
             width: 300px; background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(25px);
-            border-radius: 20px; border: 1px solid var(--bank-blue);
-            padding: 25px; z-index: 100; box-shadow: 0 0 50px rgba(0,0,0,1);
+            border-radius: 20px; border: 1px solid var(--bank-blue); padding: 25px; z-index: 100;
         }
 
-        /* چیدمان مرکزی و دایره‌ای آیکون‌ها */
+        /* چیدمان داشبورد */
         .container { position: relative; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; }
         .main-brain {
             width: 190px; height: 190px; border-radius: 50%;
@@ -43,79 +36,83 @@
             box-shadow: 0 0 70px var(--glow); z-index: 10;
             border: 2px solid var(--glow); animation: pulse 3s infinite ease-in-out;
         }
-        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.05); opacity: 1; } }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
 
         .node {
             position: absolute; width: 85px; height: 85px; border-radius: 50%;
             background: rgba(255,255,255,0.05); backdrop-filter: blur(10px);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            border: 1px solid rgba(255,255,255,0.2); cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255,255,255,0.2); cursor: pointer; transition: 0.4s;
         }
-        .node:hover { transform: scale(1.2); box-shadow: 0 0 35px currentColor; background: rgba(255,255,255,0.1); }
+        .node:hover { transform: scale(1.2); box-shadow: 0 0 35px currentColor; }
         .node span { font-size: 11px; margin-top: 5px; font-weight: bold; }
         
-        /* مختصات دقیق گره‌ها برای جلوگیری از برخورد */
+        /* موقعیت گره‌ها */
         .n-video { top: 12%; left: 50%; transform: translateX(-50%); color: var(--yt); }
         .n-stories { top: 35%; right: 12%; color: var(--ig); }
-        .n-music { top: 35%; left: 12%; color: #a29bfe; }
+        .n-music { top: 35%; left: 12%; color: var(--music); }
         .n-games { bottom: 35%; right: 12%; color: var(--glow); }
         .n-iq { bottom: 35%; left: 12%; color: var(--gold); }
         .n-social { bottom: 12%; left: 50%; transform: translateX(-50%); color: var(--tg); }
 
-        /* باکس اعلان‌ها */
+        /* نوار اعلان‌ها */
         .quest-box {
             position: absolute; bottom: 25px; left: 25px;
             background: rgba(0,0,0,0.8); padding: 18px; border-radius: 15px;
             border-left: 5px solid var(--glow); width: 280px; z-index: 30;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        .iq-btn { 
-            background: rgba(255,255,255,0.1); border: 1px solid white; color: white; 
-            padding: 5px 15px; border-radius: 5px; cursor: pointer; margin: 5px; transition: 0.2s;
+
+        /* پلیر موسیقی جدید */
+        #music-player {
+            position: absolute; bottom: -100px; left: 50%; transform: translateX(-50%);
+            width: 350px; background: rgba(162, 155, 254, 0.2); backdrop-filter: blur(15px);
+            border: 1px solid var(--music); padding: 10px 20px; border-radius: 50px;
+            display: flex; align-items: center; justify-content: space-between;
+            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 40;
         }
-        .iq-btn:hover { background: var(--gold); color: black; border-color: var(--gold); }
+        #music-player.active { bottom: 30px; }
+        .play-btn { background: var(--music); border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div id="walletModal" class="wallet-modal">
-        <h3 style="color: var(--bank-blue); margin: 0 0 15px 0; text-align: center;">🏦 Quantum Ledger</h3>
-        <div style="display: flex; justify-content: space-between; margin: 10px 0; font-size: 18px;">
-            <span>Ario Gold:</span><span id="gold-bal" style="color: var(--gold);">0</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; margin: 10px 0; font-size: 18px;">
-            <span>Mini-Ario:</span><span id="mini-bal" style="color: var(--bank-blue);">50</span>
-        </div>
-        <button onclick="exchange()" style="width:100%; padding:12px; background:linear-gradient(45deg, var(--gold), #e67e22); border:none; border-radius:10px; cursor:pointer; font-weight:bold; margin-top:10px;">Convert 10 Mini to 1 Gold</button>
-        <button onclick="toggleWallet()" style="width:100%; margin-top:10px; background:#222; color:white; border:none; padding:10px; border-radius:10px; cursor:pointer;">Close Ledger</button>
+        <h3 style="color: var(--bank-blue); text-align: center;">🏦 Quantum Ledger</h3>
+        <div style="display: flex; justify-content: space-between; margin: 10px 0;"><span>Ario Gold:</span><span id="gold-bal" style="color: var(--gold);">0</span></div>
+        <div style="display: flex; justify-content: space-between; margin: 10px 0;"><span>Mini-Ario:</span><span id="mini-bal" style="color: var(--bank-blue);">50</span></div>
+        <button onclick="exchange()" style="width:100%; padding:12px; background:var(--gold); border:none; border-radius:10px; cursor:pointer; font-weight:bold;">Convert 10 Mini -> 1 Gold</button>
+        <button onclick="toggleWallet()" style="width:100%; margin-top:10px; background:#222; color:white; border:none; padding:10px; border-radius:10px; cursor:pointer;">Close</button>
+    </div>
+
+    <div id="music-player">
+        <div style="font-size: 12px; color: var(--music);">🎵 <span id="track-name">Ario Quantum Beats</span></div>
+        <button class="play-btn" onclick="togglePlay()">▶</button>
+        <button onclick="closeMusic()" style="background:none; border:none; color:white; cursor:pointer;">✕</button>
     </div>
 
     <div class="top-bank" onclick="toggleWallet()">
         <div class="mini-ario-brain">💎</div>
-        <p style="font-size: 11px; color: var(--bank-blue); margin: 5px 0; font-weight: bold;">BANK</p>
+        <p style="font-size: 11px; color: var(--bank-blue); margin: 5px 0;">BANK</p>
     </div>
 
     <div class="container">
         <div class="main-brain"></div>
-        
         <div class="node n-video" onclick="showApp('Videos')">🎬<span>Videos</span></div>
         <div class="node n-stories" onclick="showApp('Stories')">📸<span>Stories</span></div>
-        <div class="node n-music" onclick="showApp('Music')">🎵<span>Music</span></div>
+        <div class="node n-music" onclick="activateMusic()">🎵<span>Music</span></div>
         <div class="node n-games" onclick="showApp('Games')">🎮<span>Games</span></div>
         <div class="node n-iq" onclick="startIQTest()">🧠<span>IQ Test</span></div>
         <div class="node n-social" onclick="showApp('Social')">✈️<span>Social</span></div>
     </div>
 
     <div class="quest-box" id="notif">
-        <h4 style="margin:0" id="notif-title">🏆 Status</h4>
-        <p id="notif-text" style="font-size: 13px;">Quantum Network Online. Node identity verified.</p>
+        <h4 style="margin:0">🏆 Status</h4>
+        <p id="notif-text" style="font-size: 13px;">Quantum Network Online.</p>
     </div>
 
     <script>
-        let gold = 0; 
-        let mini = 50;
+        let gold = 0, mini = 50, isPlaying = false;
 
-        // تابع باز و بسته کردن بانک
         function toggleWallet() {
             document.getElementById('gold-bal').innerText = gold;
             document.getElementById('mini-bal').innerText = mini;
@@ -123,58 +120,49 @@
             m.style.display = m.style.display === 'block' ? 'none' : 'block';
         }
 
-        // سیستم تبدیل ارز
         function exchange() {
-            if(mini >= 10) { 
-                mini -= 10; 
-                gold += 1; 
-                document.getElementById('gold-bal').innerText = gold;
-                document.getElementById('mini-bal').innerText = mini;
-                console.log("Exchange successful");
-            } else { 
-                alert("Insufficient Mini-Ario! Earn more in IQ Test."); 
+            if(mini >= 10) { mini -= 10; gold += 1; toggleWallet(); }
+            else { alert("Need 10 Mini-Ario!"); }
+        }
+
+        function activateMusic() {
+            document.getElementById('music-player').classList.add('active');
+            showApp('Music');
+        }
+
+        function closeMusic() { document.getElementById('music-player').classList.remove('active'); }
+
+        function togglePlay() {
+            isPlaying = !isPlaying;
+            const btn = document.querySelector('.play-btn');
+            btn.innerText = isPlaying ? "⏸" : "▶";
+            if(isPlaying) {
+                document.getElementById('notif').innerHTML = "<h4>🎵 Music Active</h4><p>Earning energy nodes while listening...</p>";
             }
         }
 
-        // مدیریت اعلان‌های عمومی
-        function showApp(name) {
-            const title = document.getElementById('notif-title');
-            const text = document.getElementById('notif-text');
-            title.innerText = `🚀 ${name} Module`;
-            text.innerText = `Connecting to ${name} neural node... Syncing data...`;
-            
-            if(name === 'Videos') {
-                setTimeout(() => { text.innerText = "Scanning completed. No new original content detected."; }, 2000);
-            }
-        }
-
-        // --- بخش جدید: تست هوش واقعی ---
         function startIQTest() {
             const notif = document.getElementById('notif');
-            notif.style.borderColor = "var(--gold)";
             notif.innerHTML = `
                 <h4 style="color:var(--gold)">🧠 IQ Challenge</h4>
-                <p id="q-text">Which Ario Node is the fastest?</p>
-                <button class="iq-btn" onclick="checkIQ('Quantum')">Quantum</button>
-                <button class="iq-btn" onclick="checkIQ('Classic')">Classic</button>
+                <p>Which Ario Node is the fastest?</p>
+                <button onclick="checkIQ(true)" style="background:none; border:1px solid white; color:white; padding:5px 10px; cursor:pointer; margin-right:5px;">Quantum</button>
+                <button onclick="checkIQ(false)" style="background:none; border:1px solid white; color:white; padding:5px 10px; cursor:pointer;">Classic</button>
             `;
         }
 
-        function checkIQ(answer) {
-            const notif = document.getElementById('notif');
-            if(answer === 'Quantum') {
-                notif.innerHTML = `<h4>✅ CORRECT!</h4><p>Analytical Speed Verified. +10 Mini-Ario added to your ledger!</p>`;
+        function checkIQ(isCorrect) {
+            if(isCorrect) {
                 mini += 10;
-                // آپدیت آنی بانک اگر باز باشد
-                document.getElementById('mini-bal').innerText = mini;
+                document.getElementById('notif').innerHTML = "<h4>✅ CORRECT!</h4><p>+10 Mini-Ario added!</p>";
             } else {
-                notif.innerHTML = `<h4>❌ ACCESS DENIED</h4><p>Incorrect logic. Try again after neural recalibration.</p>`;
+                document.getElementById('notif').innerHTML = "<h4>❌ WRONG</h4><p>Neural recalibration needed.</p>";
             }
-            // بازگشت به حالت عادی بعد از ۵ ثانیه
-            setTimeout(() => {
-                notif.style.borderColor = "var(--glow)";
-                notif.innerHTML = `<h4 style="margin:0">🏆 Status</h4><p style="font-size: 13px;">Quantum Network Online.</p>`;
-            }, 5000);
+            setTimeout(() => { document.getElementById('notif').innerHTML = "<h4>🏆 Status</h4><p>Quantum Network Online.</p>"; }, 3000);
+        }
+
+        function showApp(name) {
+            document.getElementById('notif').innerHTML = `<h4>🚀 ${name} Module</h4><p>Syncing data with ${name} network...</p>`;
         }
     </script>
 </body>
