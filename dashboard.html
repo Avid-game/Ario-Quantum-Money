@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AQM Dashboard | Quantum Neural Network</title>
+    <title>AQM Dashboard | Quantum Intelligence</title>
     <style>
         :root {
             --glow: #00f2fe; --bank-blue: #4facfe; --gold: #fcc419;
@@ -28,7 +28,7 @@
             border-radius: 20px; border: 1px solid var(--bank-blue); padding: 25px; z-index: 100;
         }
 
-        /* چیدمان داشبورد */
+        /* چیدمان مرکزی */
         .container { position: relative; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; }
         .main-brain {
             width: 190px; height: 190px; border-radius: 50%;
@@ -47,7 +47,6 @@
         .node:hover { transform: scale(1.2); box-shadow: 0 0 35px currentColor; }
         .node span { font-size: 11px; margin-top: 5px; font-weight: bold; }
         
-        /* موقعیت گره‌ها */
         .n-video { top: 12%; left: 50%; transform: translateX(-50%); color: var(--yt); }
         .n-stories { top: 35%; right: 12%; color: var(--ig); }
         .n-music { top: 35%; left: 12%; color: var(--music); }
@@ -55,23 +54,29 @@
         .n-iq { bottom: 35%; left: 12%; color: var(--gold); }
         .n-social { bottom: 12%; left: 50%; transform: translateX(-50%); color: var(--tg); }
 
-        /* نوار اعلان‌ها */
         .quest-box {
             position: absolute; bottom: 25px; left: 25px;
-            background: rgba(0,0,0,0.8); padding: 18px; border-radius: 15px;
+            background: rgba(0,0,0,0.85); padding: 18px; border-radius: 15px;
             border-left: 5px solid var(--glow); width: 280px; z-index: 30;
         }
 
-        /* پلیر موسیقی جدید */
+        /* پلیر موسیقی */
         #music-player {
             position: absolute; bottom: -100px; left: 50%; transform: translateX(-50%);
-            width: 350px; background: rgba(162, 155, 254, 0.2); backdrop-filter: blur(15px);
+            width: 350px; background: rgba(162, 155, 254, 0.15); backdrop-filter: blur(15px);
             border: 1px solid var(--music); padding: 10px 20px; border-radius: 50px;
             display: flex; align-items: center; justify-content: space-between;
-            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 40;
+            transition: 0.5s; z-index: 40;
         }
         #music-player.active { bottom: 30px; }
-        .play-btn { background: var(--music); border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-weight: bold; }
+        .play-btn { background: var(--music); border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 18px; }
+
+        /* دکمه‌های شبکه‌های اجتماعی */
+        .social-btn {
+            display: block; width: 100%; padding: 8px; margin-top: 5px;
+            border-radius: 8px; text-decoration: none; color: white; text-align: center;
+            font-size: 12px; font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -102,7 +107,7 @@
         <div class="node n-music" onclick="activateMusic()">🎵<span>Music</span></div>
         <div class="node n-games" onclick="showApp('Games')">🎮<span>Games</span></div>
         <div class="node n-iq" onclick="startIQTest()">🧠<span>IQ Test</span></div>
-        <div class="node n-social" onclick="showApp('Social')">✈️<span>Social</span></div>
+        <div class="node n-social" onclick="openSocial()">✈️<span>Social</span></div>
     </div>
 
     <div class="quest-box" id="notif">
@@ -134,11 +139,8 @@
 
         function togglePlay() {
             isPlaying = !isPlaying;
-            const btn = document.querySelector('.play-btn');
-            btn.innerText = isPlaying ? "⏸" : "▶";
-            if(isPlaying) {
-                document.getElementById('notif').innerHTML = "<h4>🎵 Music Active</h4><p>Earning energy nodes while listening...</p>";
-            }
+            document.querySelector('.play-btn').innerText = isPlaying ? "⏸" : "▶";
+            if(isPlaying) showApp('Music Playing');
         }
 
         function startIQTest() {
@@ -156,13 +158,25 @@
                 mini += 10;
                 document.getElementById('notif').innerHTML = "<h4>✅ CORRECT!</h4><p>+10 Mini-Ario added!</p>";
             } else {
-                document.getElementById('notif').innerHTML = "<h4>❌ WRONG</h4><p>Neural recalibration needed.</p>";
+                document.getElementById('notif').innerHTML = "<h4>❌ WRONG</h4><p>Try again later.</p>";
             }
-            setTimeout(() => { document.getElementById('notif').innerHTML = "<h4>🏆 Status</h4><p>Quantum Network Online.</p>"; }, 3000);
+            setTimeout(() => { showApp('System'); }, 3000);
+        }
+
+        function openSocial() {
+            const notif = document.getElementById('notif');
+            notif.style.borderColor = "var(--tg)";
+            notif.innerHTML = `
+                <h4>✈️ Connect with Admin</h4>
+                <a href="https://t.me/your_username" target="_blank" class="social-btn" style="background:var(--tg)">Telegram Channel</a>
+                <a href="https://instagram.com/your_username" target="_blank" class="social-btn" style="background:var(--ig)">Instagram</a>
+                <button onclick="showApp('System')" style="width:100%; background:none; border:none; color:#777; cursor:pointer; margin-top:5px;">Back</button>
+            `;
         }
 
         function showApp(name) {
-            document.getElementById('notif').innerHTML = `<h4>🚀 ${name} Module</h4><p>Syncing data with ${name} network...</p>`;
+            document.getElementById('notif').style.borderColor = "var(--glow)";
+            document.getElementById('notif').innerHTML = `<h4>🚀 ${name} Module</h4><p>Quantum Network Online.</p>`;
         }
     </script>
 </body>
