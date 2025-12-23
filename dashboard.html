@@ -14,6 +14,19 @@
             background: radial-gradient(circle at center, #1a1a2e 0%, #050505 100%);
             color: white; font-family: 'Segoe UI', sans-serif; margin: 0; height: 100vh; overflow: hidden;
         }
+        /* استایل بانک شیشه‌ای */
+        .wallet-modal {
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 320px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px);
+            border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 20px; z-index: 100; box-shadow: 0 0 50px rgba(0,0,0,0.5);
+        }
+        .wallet-header { color: var(--bank-blue); border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-bottom: 15px; }
+        .balance-item { display: flex; justify-content: space-between; margin: 10px 0; font-size: 18px; }
+        .btn-trade {
+            width: 100%; background: linear-gradient(45deg, var(--bank-blue), var(--glow));
+            border: none; padding: 10px; border-radius: 10px; color: white; font-weight: bold; cursor: pointer; margin-top: 15px;
+        }
         /* بخش بانکی بالایی */
         .top-bank {
             position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
@@ -25,7 +38,7 @@
             display: flex; align-items: center; justify-content: center;
             box-shadow: 0 0 20px var(--bank-blue); cursor: pointer;
         }
-        /* مغز مرکزی با انیمیشن تپش */
+        /* مغز مرکزی */
         .container { position: relative; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; }
         .main-brain {
             width: 200px; height: 200px; border-radius: 50%;
@@ -39,7 +52,6 @@
             50% { transform: scale(1.05); box-shadow: 0 0 100px var(--glow); }
             100% { transform: scale(1); box-shadow: 0 0 50px var(--glow); }
         }
-        /* آیکون‌های پلتفرم */
         .orbit-ring {
             position: absolute; width: 550px; height: 550px;
             border: 1px solid rgba(255,255,255,0.05); border-radius: 50%;
@@ -51,21 +63,25 @@
             border: 1px solid rgba(255,255,255,0.2); cursor: pointer;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        .node:hover { transform: scale(1.3); box-shadow: 0 0 30px currentColor; background: rgba(255,255,255,0.1); }
-        .node span { font-size: 11px; margin-top: 5px; font-weight: bold; }
-        /* باکس اعلان‌ها و اسکنر */
+        .node:hover { transform: scale(1.3); box-shadow: 0 0 30px currentColor; }
         .quest-box {
             position: absolute; bottom: 30px; left: 30px;
             background: rgba(0,0,0,0.7); padding: 15px; border-radius: 15px;
             border-left: 5px solid var(--glow); width: 280px; z-index: 30;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
     </style>
 </head>
 <body>
 
+    <div id="walletModal" class="wallet-modal">
+        <div class="wallet-header"><h3>🏦 Quantum Bank</h3></div>
+        <div class="balance-item"><span>Ario Gold:</span><span id="gold-bal" style="color: var(--gold);">0</span></div>
+        <div class="balance-item"><span>Mini-Ario:</span><span id="mini-bal" style="color: var(--bank-blue);">0</span></div>
+        <button class="btn-trade" onclick="toggleWallet()">Close Ledger</button>
+    </div>
+
     <div class="top-bank">
-        <div class="mini-ario-brain" title="Mini-Ario Banking">💎</div>
+        <div class="mini-ario-brain" onclick="toggleWallet()" title="Open Bank">💎</div>
         <p style="font-size: 12px; color: var(--bank-blue);">Bank / Trade</p>
     </div>
 
@@ -74,11 +90,11 @@
         <div class="orbit-ring"></div>
         
         <div class="node" style="top: 0; left: 50%; transform: translate(-50%, -50%); color: var(--yt);" onclick="scanVideoContent()">🎬<span>Videos</span></div>
-        <div class="node" style="top: 25%; right: 5%; color: var(--ig);" onclick="alert('Stories Section Loading...')">📸<span>Stories</span></div>
-        <div class="node" style="bottom: 25%; right: 5%; color: var(--glow);" onclick="alert('Games Section Loading...')">🎮<span>Games</span></div>
-        <div class="node" style="bottom: 0; left: 50%; transform: translate(-50%, 50%); color: var(--tg);" onclick="alert('Social Section Loading...')">✈️<span>Social</span></div>
-        <div class="node" style="bottom: 25%; left: 5%; color: var(--gold);" onclick="alert('IQ Test Section Loading...')">🧠<span>IQ Test</span></div>
-        <div class="node" style="top: 25%; left: 5%; color: #a29bfe;" onclick="alert('Music Section Loading...')">🎵<span>Music</span></div>
+        <div class="node" style="top: 25%; right: 5%; color: var(--ig);">📸<span>Stories</span></div>
+        <div class="node" style="bottom: 25%; right: 5%; color: var(--glow);">🎮<span>Games</span></div>
+        <div class="node" style="bottom: 0; left: 50%; transform: translate(-50%, 50%); color: var(--tg);">✈️<span>Social</span></div>
+        <div class="node" style="bottom: 25%; left: 5%; color: var(--gold);">🧠<span>IQ Test</span></div>
+        <div class="node" style="top: 25%; left: 5%; color: #a29bfe;">🎵<span>Music</span></div>
     </div>
 
     <div class="quest-box" id="notification-box">
@@ -87,20 +103,27 @@
     </div>
 
     <script>
-        // ۱. سیستم پاداش‌دهی
+        let totalGold = 0;
+
+        function toggleWallet() {
+            const modal = document.getElementById('walletModal');
+            document.getElementById('gold-bal').innerText = totalGold;
+            modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+        }
+
         function grantReward(amount) {
+            totalGold += amount;
             const questBox = document.getElementById('notification-box');
             questBox.style.borderColor = "#fcc419"; 
             questBox.innerHTML = `<h4>🎉 CONGRATS!</h4><p>You earned ${amount} Ario Coins!</p>`;
             document.querySelector('.main-brain').style.boxShadow = "0 0 120px #fcc419";
+            console.log("Bank Updated: " + totalGold);
         }
 
-        // ۲. اسکنر هوشمند ویدیو
         function scanVideoContent() {
             const questBox = document.getElementById('notification-box');
             questBox.style.borderColor = "#ff0000";
             let progress = 0;
-            
             const interval = setInterval(() => {
                 progress += 10;
                 questBox.innerHTML = `<h4>🔍 AI SCANNING...</h4><p>Analyzing video originality: ${progress}%</p>`;
@@ -112,7 +135,6 @@
             }, 300);
         }
 
-        // ۳. چالش لبخند اولیه (شبیه‌سازی)
         setTimeout(() => {
             let timeLeft = 5;
             const timer = setInterval(() => {
@@ -127,4 +149,3 @@
     </script>
 </body>
 </html>
- 
