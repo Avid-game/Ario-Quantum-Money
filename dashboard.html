@@ -90,3 +90,42 @@
     </script>
 </body>
 </html>
+// ۱. بارگذاری مدل‌های هوش مصنوعی برای چالش لبخند
+async function startQuestSystem() {
+    // نمایش لودینگ برای کاربر
+    document.getElementById('quest-text').innerText = "Initializing Quantum AI...";
+    
+    // در اینجا فرض می‌کنیم کتابخانه‌ها در صفحه قبل بارگذاری شده‌اند
+    // ایجاد یک تایمر برای چالش لبخند
+    let smileDuration = 0;
+    const questDisplay = document.getElementById('quest-text');
+
+    const checkSmile = setInterval(() => {
+        // شبیه‌سازی تشخیص لبخند (در فاز بعد به دوربین وصل می‌شود)
+        // فعلاً برای تست، اگر کاربر روی صفحه کلیک کند، پاداش می‌گیرد
+        questDisplay.innerHTML = "Task: Smile for 5 seconds! <br> Progress: " + smileDuration + "s";
+        
+        smileDuration++;
+
+        if (smileDuration > 5) {
+            clearInterval(checkSmile);
+            grantReward(10);
+        }
+    }, 1000);
+}
+
+// ۲. تابع واریز پاداش (Ario Coin)
+function grantReward(amount) {
+    const questBox = document.querySelector('.quest-box');
+    questBox.style.borderColor = "#fcc419"; // تغییر رنگ به طلایی
+    questBox.innerHTML = `<h4>🎉 CONGRATS!</h4><p>You earned ${amount} Ario Coins!</p>`;
+    
+    // افکت نوری روی مغز مرکزی (نماد واریز)
+    document.querySelector('.main-brain').style.boxShadow = "0 0 100px #fcc419";
+    
+    // ثبت در کنسول (برای اتصال به Supabase در مرحله بعد)
+    console.log("Transaction: +" + amount + " AQM to user wallet.");
+}
+
+// شروع خودکار چالش بعد از ۲ ثانیه ورود
+setTimeout(startQuestSystem, 2000);
