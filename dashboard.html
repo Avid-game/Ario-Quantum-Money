@@ -5,7 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AQM Dashboard | Quantum Intelligence</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-    <style>
+    <style>.main-brain {
+    width: 200px; height: 200px; border-radius: 50%;
+    background: url('logo.jpg') center/cover; /* استفاده از فایل آپلود شده تو */
+    box-shadow: 0 0 80px rgba(0, 242, 254, 0.6); 
+    z-index: 10;
+    border: 2px solid var(--glow);
+    animation: pulse 3s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 0 50px var(--glow); }
+    50% { transform: scale(1.05); box-shadow: 0 0 100px var(--glow); }
+    100% { transform: scale(1); box-shadow: 0 0 50px var(--glow); }
+}
         :root {
             --glow: #00f2fe; --bank-blue: #4facfe; --gold: #fcc419;
             --yt: #ff0000; --ig: #e1306c; --tg: #0088cc;
