@@ -3,180 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AQM Dashboard | Quantum Intelligence</title>
+    <title>AQM Dashboard | Secure Quantum Network</title>
     <style>
         :root {
             --glow: #00f2fe; --bank-blue: #4facfe; --gold: #fcc419;
-            --yt: #ff0000; --ig: #e1306c; --tg: #0088cc; --music: #a29bfe;
+            --yt: #ff0000; --ig: #e1306c; --tg: #0088cc; --wa: #25d366; --fb: #1877f2; --music: #a29bfe;
         }
         body {
-            background: radial-gradient(circle at center, #1a1a2e 0%, #050505 100%);
+            background: radial-gradient(circle at center, #0a0a1a 0%, #020205 100%);
             color: white; font-family: 'Segoe UI', sans-serif; margin: 0; height: 100vh; overflow: hidden;
         }
 
-        /* بخش بانک */
+        /* بخش بانک و پروفایل ایمن */
         .top-bank { position: absolute; top: 20px; right: 25px; text-align: center; z-index: 50; cursor: pointer; }
         .mini-ario-brain {
-            width: 65px; height: 65px; background: rgba(79, 172, 254, 0.2);
+            width: 60px; height: 60px; background: rgba(79, 172, 254, 0.1);
             border-radius: 50%; border: 2px solid var(--bank-blue);
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 0 15px var(--bank-blue); transition: 0.3s;
+            box-shadow: 0 0 15px var(--bank-blue);
         }
+
+        /* آیکون‌های کمکی بالایی */
+        .top-left-tools { position: absolute; top: 20px; left: 25px; display: flex; gap: 15px; z-index: 50; }
+        .tool-icon { font-size: 20px; cursor: pointer; opacity: 0.7; transition: 0.3s; }
+        .tool-icon:hover { opacity: 1; transform: scale(1.2); }
+
         .wallet-modal {
             display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 300px; background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(25px);
+            width: 320px; background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(25px);
             border-radius: 20px; border: 1px solid var(--bank-blue); padding: 25px; z-index: 100;
         }
 
         /* چیدمان مرکزی */
         .container { position: relative; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; }
         .main-brain {
-            width: 190px; height: 190px; border-radius: 50%;
+            width: 180px; height: 180px; border-radius: 50%;
             background: url('logo.jpg') center/cover;
-            box-shadow: 0 0 70px var(--glow); z-index: 10;
-            border: 2px solid var(--glow); animation: pulse 3s infinite ease-in-out;
+            box-shadow: 0 0 60px var(--glow); z-index: 10; border: 2px solid var(--glow);
         }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
 
         .node {
-            position: absolute; width: 85px; height: 85px; border-radius: 50%;
-            background: rgba(255,255,255,0.05); backdrop-filter: blur(10px);
+            position: absolute; width: 80px; height: 80px; border-radius: 50%;
+            background: rgba(255,255,255,0.03); backdrop-filter: blur(10px);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            border: 1px solid rgba(255,255,255,0.2); cursor: pointer; transition: 0.4s;
+            border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: 0.4s;
         }
-        .node:hover { transform: scale(1.2); box-shadow: 0 0 35px currentColor; }
-        .node span { font-size: 11px; margin-top: 5px; font-weight: bold; }
+        .node:hover { transform: scale(1.15); background: rgba(255,255,255,0.1); }
+        .node span { font-size: 10px; margin-top: 5px; font-weight: bold; text-transform: uppercase; }
         
-        .n-video { top: 12%; left: 50%; transform: translateX(-50%); color: var(--yt); }
-        .n-stories { top: 35%; right: 12%; color: var(--ig); }
-        .n-music { top: 35%; left: 12%; color: var(--music); }
-        .n-games { bottom: 35%; right: 12%; color: var(--glow); }
-        .n-iq { bottom: 35%; left: 12%; color: var(--gold); }
-        .n-social { bottom: 12%; left: 50%; transform: translateX(-50%); color: var(--tg); }
+        /* مختصات جدید دایره‌ای */
+        .n-video { top: 10%; left: 50%; transform: translateX(-50%); color: var(--yt); }
+        .n-stories { top: 30%; right: 10%; color: var(--ig); }
+        .n-music { top: 30%; left: 10%; color: var(--music); }
+        .n-games { bottom: 30%; right: 10%; color: var(--glow); }
+        .n-iq { bottom: 30%; left: 10%; color: var(--gold); }
+        .n-social { bottom: 10%; left: 50%; transform: translateX(-50%); color: var(--tg); }
 
         .quest-box {
             position: absolute; bottom: 25px; left: 25px;
-            background: rgba(0,0,0,0.85); padding: 18px; border-radius: 15px;
+            background: rgba(0,0,0,0.85); padding: 15px; border-radius: 12px;
             border-left: 5px solid var(--glow); width: 280px; z-index: 30;
         }
 
-        /* پلیر موسیقی */
         #music-player {
             position: absolute; bottom: -100px; left: 50%; transform: translateX(-50%);
-            width: 350px; background: rgba(162, 155, 254, 0.15); backdrop-filter: blur(15px);
-            border: 1px solid var(--music); padding: 10px 20px; border-radius: 50px;
-            display: flex; align-items: center; justify-content: space-between;
-            transition: 0.5s; z-index: 40;
+            width: 320px; background: rgba(162, 155, 254, 0.1); border: 1px solid var(--music);
+            padding: 10px 20px; border-radius: 50px; display: flex; align-items: center; 
+            justify-content: space-between; transition: 0.5s; z-index: 40;
         }
-        #music-player.active { bottom: 30px; }
-        .play-btn { background: var(--music); border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 18px; }
-
-        /* دکمه‌های شبکه‌های اجتماعی */
+        #music-player.active { bottom: 80px; }
+        
         .social-btn {
-            display: block; width: 100%; padding: 8px; margin-top: 5px;
-            border-radius: 8px; text-decoration: none; color: white; text-align: center;
-            font-size: 12px; font-weight: bold;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+            width: 100%; padding: 10px; margin-top: 8px; border-radius: 8px;
+            text-decoration: none; color: white; font-size: 13px; font-weight: bold;
         }
     </style>
 </head>
 <body>
 
+    <div class="top-left-tools">
+        <div class="tool-icon" title="Language" onclick="alert('Language Selection: English / Persian')">🌐</div>
+        <div class="tool-icon" title="Q&A Forum" onclick="showApp('Q&A Forum')">💡</div>
+        <div class="tool-icon" title="Share Project" onclick="shareProject()">🔗</div>
+    </div>
+
     <div id="walletModal" class="wallet-modal">
-        <h3 style="color: var(--bank-blue); text-align: center;">🏦 Quantum Ledger</h3>
-        <div style="display: flex; justify-content: space-between; margin: 10px 0;"><span>Ario Gold:</span><span id="gold-bal" style="color: var(--gold);">0</span></div>
-        <div style="display: flex; justify-content: space-between; margin: 10px 0;"><span>Mini-Ario:</span><span id="mini-bal" style="color: var(--bank-blue);">50</span></div>
-        <button onclick="exchange()" style="width:100%; padding:12px; background:var(--gold); border:none; border-radius:10px; cursor:pointer; font-weight:bold;">Convert 10 Mini -> 1 Gold</button>
-        <button onclick="toggleWallet()" style="width:100%; margin-top:10px; background:#222; color:white; border:none; padding:10px; border-radius:10px; cursor:pointer;">Close</button>
+        <h3 style="color: var(--bank-blue); text-align: center; margin-top: 0;">🏦 Asset Ledger</h3>
+        <p style="font-size: 12px; color: #888; text-align: center;">Privacy Mode Active: Values hidden from public.</p>
+        <hr style="opacity: 0.1;">
+        <div style="display: flex; justify-content: space-between; margin: 15px 0;"><span>Ario Coins:</span><span id="gold-bal" style="color: var(--gold);">0</span></div>
+        <div style="display: flex; justify-content: space-between; margin: 15px 0;"><span>Mini-Ario:</span><span id="mini-bal" style="color: var(--bank-blue);">0</span></div>
+        <button onclick="exchange()" style="width:100%; padding:12px; background:var(--bank-blue); border:none; border-radius:10px; cursor:pointer; color:white; font-weight:bold;">Convert 100 Mini -> 1 Ario</button>
+        <button onclick="toggleWallet()" style="width:100%; margin-top:10px; background:transparent; border: 1px solid #333; color:white; padding:10px; border-radius:10px; cursor:pointer;">Close</button>
     </div>
 
     <div id="music-player">
-        <div style="font-size: 12px; color: var(--music);">🎵 <span id="track-name">Ario Quantum Beats</span></div>
-        <button class="play-btn" onclick="togglePlay()">▶</button>
+        <div style="font-size: 11px; color: var(--music);">🎵 <span id="track-name">Ario Quantum Beats</span></div>
+        <button onclick="togglePlay()" id="pBtn" style="background:var(--music); border:none; width:35px; height:35px; border-radius:50%; cursor:pointer;">▶</button>
         <button onclick="closeMusic()" style="background:none; border:none; color:white; cursor:pointer;">✕</button>
     </div>
 
     <div class="top-bank" onclick="toggleWallet()">
         <div class="mini-ario-brain">💎</div>
-        <p style="font-size: 11px; color: var(--bank-blue); margin: 5px 0;">BANK</p>
+        <p style="font-size: 10px; color: var(--bank-blue); margin: 5px 0; font-weight: bold;">ASSETS</p>
     </div>
 
     <div class="container">
-        <div class="main-brain"></div>
+        <div class="main-brain" onclick="showManifesto()"></div>
         <div class="node n-video" onclick="showApp('Videos')">🎬<span>Videos</span></div>
         <div class="node n-stories" onclick="showApp('Stories')">📸<span>Stories</span></div>
         <div class="node n-music" onclick="activateMusic()">🎵<span>Music</span></div>
         <div class="node n-games" onclick="showApp('Games')">🎮<span>Games</span></div>
         <div class="node n-iq" onclick="startIQTest()">🧠<span>IQ Test</span></div>
-        <div class="node n-social" onclick="openSocial()">✈️<span>Social</span></div>
+        <div class="node n-social" onclick="openSocial()">✈️<span>Connect</span></div>
     </div>
 
     <div class="quest-box" id="notif">
-        <h4 style="margin:0">🏆 Status</h4>
-        <p id="notif-text" style="font-size: 13px;">Quantum Network Online.</p>
+        <h4 style="margin:0" id="notif-title">🏆 AQM Status</h4>
+        <p id="notif-text" style="font-size: 12px; line-height: 1.4;">Welcome to the first AI-Human Innovation. Your creativity builds future value.</p>
     </div>
 
     <script>
-        let gold = 0, mini = 50, isPlaying = false;
+        let ario = 0, mini = 150, isPlaying = false;
 
         function toggleWallet() {
-            document.getElementById('gold-bal').innerText = gold;
+            document.getElementById('gold-bal').innerText = ario;
             document.getElementById('mini-bal').innerText = mini;
             const m = document.getElementById('walletModal');
             m.style.display = m.style.display === 'block' ? 'none' : 'block';
         }
 
         function exchange() {
-            if(mini >= 10) { mini -= 10; gold += 1; toggleWallet(); }
-            else { alert("Need 10 Mini-Ario!"); }
+            if(mini >= 100) { 
+                mini -= 100; ario += 1; 
+                toggleWallet(); 
+                showApp('Exchange Success');
+            } else { alert("Need 100 Mini-Ario for 1 Ario Coin."); }
         }
 
-        function activateMusic() {
-            document.getElementById('music-player').classList.add('active');
-            showApp('Music');
-        }
-
-        function closeMusic() { document.getElementById('music-player').classList.remove('active'); }
-
-        function togglePlay() {
-            isPlaying = !isPlaying;
-            document.querySelector('.play-btn').innerText = isPlaying ? "⏸" : "▶";
-            if(isPlaying) showApp('Music Playing');
-        }
-
-        function startIQTest() {
-            const notif = document.getElementById('notif');
-            notif.innerHTML = `
-                <h4 style="color:var(--gold)">🧠 IQ Challenge</h4>
-                <p>Which Ario Node is the fastest?</p>
-                <button onclick="checkIQ(true)" style="background:none; border:1px solid white; color:white; padding:5px 10px; cursor:pointer; margin-right:5px;">Quantum</button>
-                <button onclick="checkIQ(false)" style="background:none; border:1px solid white; color:white; padding:5px 10px; cursor:pointer;">Classic</button>
-            `;
-        }
-
-        function checkIQ(isCorrect) {
-            if(isCorrect) {
-                mini += 10;
-                document.getElementById('notif').innerHTML = "<h4>✅ CORRECT!</h4><p>+10 Mini-Ario added!</p>";
-            } else {
-                document.getElementById('notif').innerHTML = "<h4>❌ WRONG</h4><p>Try again later.</p>";
-            }
-            setTimeout(() => { showApp('System'); }, 3000);
+        function showManifesto() {
+            const nt = document.getElementById('notif');
+            nt.innerHTML = `<h4>🌐 AQM Vision</h4><p style="font-size:11px;">This platform transforms your digital footprint into future assets. No data is public; your privacy is our protocol.</p>`;
         }
 
         function openSocial() {
             const notif = document.getElementById('notif');
-            notif.style.borderColor = "var(--tg)";
             notif.innerHTML = `
-                <h4>✈️ Connect with Admin</h4>
-                <a href="https://t.me/your_username" target="_blank" class="social-btn" style="background:var(--tg)">Telegram Channel</a>
-                <a href="https://instagram.com/your_username" target="_blank" class="social-btn" style="background:var(--ig)">Instagram</a>
-                <button onclick="showApp('System')" style="width:100%; background:none; border:none; color:#777; cursor:pointer; margin-top:5px;">Back</button>
+                <h4>✈️ Community Hub</h4>
+                <a href="#" class="social-btn" style="background:var(--tg)">Telegram</a>
+                <a href="#" class="social-btn" style="background:var(--wa)">WhatsApp Support</a>
+                <a href="#" class="social-btn" style="background:var(--fb)">Facebook Community</a>
+                <button onclick="showApp('System')" style="width:100%; background:none; border:none; color:#555; cursor:pointer; margin-top:5px;">Back</button>
             `;
         }
 
+        function shareProject() {
+            const url = window.location.href;
+            navigator.clipboard.writeText(url);
+            alert("Project Link Copied! Share it to grow our network.");
+        }
+
+        function activateMusic() { document.getElementById('music-player').classList.add('active'); }
+        function closeMusic() { document.getElementById('music-player').classList.remove('active'); }
+        function togglePlay() { 
+            isPlaying = !isPlaying; 
+            document.getElementById('pBtn').innerText = isPlaying ? "⏸" : "▶"; 
+        }
+
+        function startIQTest() {
+            document.getElementById('notif').innerHTML = `
+                <h4>🧠 IQ Challenge</h4><p>Is AQM a collaborative AI project?</p>
+                <button onclick="checkIQ(true)" style="background:none; border:1px solid white; color:white; padding:5px; cursor:pointer;">Yes</button>
+                <button onclick="checkIQ(false)" style="background:none; border:1px solid white; color:white; padding:5px; cursor:pointer;">No</button>
+            `;
+        }
+
+        function checkIQ(correct) {
+            if(correct) { mini += 20; alert("Correct! +20 Mini-Ario Influence added."); }
+            showApp('System');
+        }
+
         function showApp(name) {
-            document.getElementById('notif').style.borderColor = "var(--glow)";
-            document.getElementById('notif').innerHTML = `<h4>🚀 ${name} Module</h4><p>Quantum Network Online.</p>`;
+            document.getElementById('notif').innerHTML = `<h4>🚀 ${name}</h4><p>Node active. Secure connection established.</p>`;
         }
     </script>
 </body>
