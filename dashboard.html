@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AQM Dashboard | Innovation Core</title>
+    <title>AQM Dashboard | Ultimate Unified</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --glow: #00f2fe; --bank-blue: #4facfe; --gold: #fcc419;
@@ -14,22 +15,21 @@
             color: white; font-family: 'Segoe UI', sans-serif; margin: 0; height: 100vh; overflow: hidden;
         }
 
-        /* Header UI */
+        /* Header Tools */
         .top-left-tools { position: absolute; top: 20px; left: 25px; display: flex; gap: 15px; z-index: 50; }
         .tool-icon { font-size: 20px; cursor: pointer; opacity: 0.7; transition: 0.3s; }
         .top-bank { position: absolute; top: 20px; right: 25px; text-align: center; z-index: 50; cursor: pointer; }
         .mini-ario-brain { width: 60px; height: 60px; background: rgba(79, 172, 254, 0.1); border-radius: 50%; border: 2px solid var(--bank-blue); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px var(--bank-blue); }
 
-        /* Dashboard Engine */
+        /* Dashboard Core */
         .container { position: relative; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; }
-        .main-brain { width: 180px; height: 180px; border-radius: 50%; background: url('logo.jpg') center/cover; box-shadow: 0 0 60px var(--glow); z-index: 10; border: 2px solid var(--glow); cursor: pointer; transition: 0.5s; }
-        .main-brain:hover { transform: rotate(5deg) scale(1.05); }
+        .main-brain { width: 180px; height: 180px; border-radius: 50%; background: url('logo.jpg') center/cover; box-shadow: 0 0 60px var(--glow); z-index: 10; border: 2px solid var(--glow); cursor: pointer; }
         
         .node { position: absolute; width: 80px; height: 80px; border-radius: 50%; background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: 0.4s; z-index: 20; }
-        .node:hover { transform: scale(1.15); box-shadow: 0 0 20px currentColor; background: rgba(255,255,255,0.1); }
+        .node:hover { transform: scale(1.15); box-shadow: 0 0 20px currentColor; }
         .node span { font-size: 10px; margin-top: 5px; font-weight: bold; }
 
-        /* Placement */
+        /* Positioning Nodes */
         .n-video { top: 12%; left: 50%; transform: translateX(-50%); color: var(--yt); }
         .n-stories { top: 35%; right: 12%; color: var(--ig); }
         .n-music { top: 35%; left: 12%; color: var(--music); }
@@ -38,26 +38,21 @@
         .n-social { bottom: 12%; left: 50%; transform: translateX(-50%); color: var(--tg); }
 
         /* Modals */
-        .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 380px; background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(25px); border-radius: 20px; border: 1px solid var(--glow); padding: 20px; z-index: 100; box-shadow: 0 0 50px rgba(0,0,0,1); }
-        .interact-bar { display: flex; justify-content: space-around; margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 10px; }
-        .btn-action { background: none; border: none; color: white; cursor: pointer; font-size: 13px; opacity: 0.8; }
-        .btn-action:hover { opacity: 1; color: var(--glow); }
-
-        /* Status & Game Box */
-        .quest-box { position: absolute; bottom: 25px; left: 25px; background: rgba(0,0,0,0.85); padding: 18px; border-radius: 15px; border-left: 5px solid var(--glow); width: 280px; z-index: 30; transition: 0.4s; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .game-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--glow); color: white; padding: 8px 25px; border-radius: 8px; cursor: pointer; transition: 0.3s; font-weight: bold; margin: 5px; }
+        .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 350px; background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(25px); border-radius: 20px; border: 1px solid var(--glow); padding: 20px; z-index: 100; box-shadow: 0 0 50px rgba(0,0,0,1); }
+        
+        .game-btn { background: rgba(255,255,255,0.1); border: 1px solid var(--glow); color: white; padding: 8px 20px; border-radius: 5px; cursor: pointer; transition: 0.3s; font-weight: bold; margin: 5px; }
         .game-btn:hover { background: var(--glow); color: black; box-shadow: 0 0 15px var(--glow); }
 
-        .social-link { display: block; padding: 12px; margin: 8px 0; border-radius: 10px; text-decoration: none; color: white; font-size: 13px; text-align: center; font-weight: bold; transition: 0.3s; }
-        .social-link:hover { filter: brightness(1.2); transform: translateY(-2px); }
+        .quest-box { position: absolute; bottom: 25px; left: 25px; background: rgba(0,0,0,0.85); padding: 15px; border-radius: 12px; border-left: 5px solid var(--glow); width: 280px; z-index: 30; transition: 0.5s; }
+        .social-link { display: block; padding: 10px; margin: 5px 0; border-radius: 8px; text-decoration: none; color: white; font-size: 13px; text-align: center; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div class="top-left-tools">
-        <div class="tool-icon" title="Language" onclick="alert('Language: EN / FA')">🌐</div>
-        <div class="tool-icon" title="Forum" onclick="openModal('qaModal')">💡</div>
-        <div class="tool-icon" title="Copy Link" onclick="copyLink()">🔗</div>
+        <div class="tool-icon" onclick="alert('Language: EN / FA')">🌐</div>
+        <div class="tool-icon" onclick="openModal('qaModal')">💡</div>
+        <div class="tool-icon" onclick="copyLink()">🔗</div>
     </div>
 
     <div class="top-bank" onclick="openModal('walletModal')">
@@ -66,52 +61,42 @@
     </div>
 
     <div id="walletModal" class="modal">
-        <h3 style="color: var(--bank-blue); text-align: center; margin-top:0;">🏦 Asset Ledger</h3>
-        <p style="font-size: 11px; color: #888; text-align: center;">Secure Quantum Encryption Active</p>
-        <div style="display: flex; justify-content: space-between; margin: 20px 0;"><span>Ario Coins:</span><span id="gold-bal" style="color: var(--gold); font-weight:bold;">0</span></div>
-        <div style="display: flex; justify-content: space-between; margin: 20px 0;"><span>Mini-Ario:</span><span id="mini-bal" style="color: var(--bank-blue); font-weight:bold;">150</span></div>
-        <button onclick="exchange()" style="width:100%; padding:14px; background:var(--bank-blue); border:none; border-radius:12px; cursor:pointer; color:white; font-weight:bold; font-size:14px;">Convert 100 Mini -> 1 Ario</button>
+        <h3 style="color: var(--bank-blue); text-align: center;">🏦 Asset Ledger</h3>
+        <div style="display: flex; justify-content: space-between; margin: 15px 0;"><span>Ario Coins:</span><span id="gold-bal">0</span></div>
+        <div style="display: flex; justify-content: space-between; margin: 15px 0;"><span>Mini-Ario:</span><span id="mini-bal">150</span></div>
+        <button onclick="exchange()" style="width:100%; padding:12px; background:var(--bank-blue); border:none; border-radius:10px; cursor:pointer; color:white; font-weight:bold;">Convert 100 Mini -> 1 Ario</button>
         <button onclick="closeModal('walletModal')" style="width:100%; margin-top:10px; background:transparent; border: 1px solid #333; color:white; padding:10px; border-radius:10px; cursor:pointer;">Close</button>
     </div>
 
-    <div id="qaModal" class="modal">
-        <h4 style="color: var(--glow); margin-top:0;">💡 Q&A Forum</h4>
-        <div style="height:150px; overflow-y:auto; font-size:12px; margin-bottom:15px; padding-right:5px;">
-            <p><b>Ario Bot:</b> Welcome! Post your innovative ideas here.<br><span style="color:#666;">Status: Secure Link Established.</span></p>
-        </div>
-        <input type="text" placeholder="Type your solution..." style="width:92%; padding:10px; border-radius:8px; border:none; background:#111; color:white; margin-bottom:10px;">
-        <button onclick="closeModal('qaModal')" style="width:100%; background:var(--glow); border:none; color:black; padding:10px; border-radius:8px; cursor:pointer; font-weight:bold;">Submit to Network</button>
-    </div>
-
     <div id="videoModal" class="modal">
-        <h4 style="margin: 0 0 15px 0; color: var(--yt); display:flex; align-items:center;">🎬 Quantum Shorts</h4>
+        <h4 style="margin: 0 0 10px 0; color: var(--yt);">🎬 Quantum Shorts</h4>
         <div style="width:100%; height:200px; background:#000; border-radius:12px; overflow:hidden;">
-            <iframe width="100%" height="100%" src="https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=0&controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe width="100%" height="100%" src="https://www.youtube.com/embed/jfKfPfyJRdk" frameborder="0" allowfullscreen></iframe>
         </div>
-        <div class="interact-bar">
-            <button class="btn-action" onclick="alert('Liked!')">❤️ Like</button>
-            <button class="btn-action" onclick="prompt('Add a comment:')">💬 Comment</button>
-            <button class="btn-action" onclick="copyLink()">📤 Share</button>
-        </div>
-        <button onclick="closeModal('videoModal')" style="width:100%; margin-top:15px; background:#222; color:white; padding:10px; border-radius:10px; border:none; cursor:pointer;">Back to Dashboard</button>
+        <button onclick="closeModal('videoModal')" style="width:100%; margin-top:15px; background:#222; color:white; padding:10px; border-radius:10px; border:none; cursor:pointer;">Back</button>
     </div>
 
     <div class="container">
-        <div class="main-brain" title="Click for Manifesto" onclick="showManifesto()"></div>
+        <div class="main-brain" onclick="showManifesto()"></div>
         <div class="node n-video" onclick="openModal('videoModal')">🎬<span>Videos</span></div>
         <div class="node n-stories" onclick="showApp('Stories')">📸<span>Stories</span></div>
-        <div class="node n-music" onclick="showApp('Music Station')">🎵<span>Music</span></div>
+        <div class="node n-music" onclick="showApp('Music')">🎵<span>Music</span></div>
         <div class="node n-games" onclick="startMiniGame()">🎮<span>Games</span></div>
         <div class="node n-iq" onclick="startIQTest()">🧠<span>IQ Test</span></div>
         <div class="node n-social" onclick="openConnect()">✈️<span>Connect</span></div>
     </div>
 
     <div class="quest-box" id="notif">
-        <h4 style="margin:0; color:var(--bank-blue);" id="nt-title">🚀 System Ready</h4>
-        <p id="notif-text" style="font-size: 12px; line-height: 1.5; margin-top:8px;">Quantum Core is online. All nodes are encrypted and secure.</p>
+        <h4 style="margin:0">🚀 System Ready</h4>
+        <p id="notif-text" style="font-size: 12px;">Quantum Core Online.</p>
     </div>
 
     <script>
+        // گام سوم: تنظیم اتصال دیتابیس (طبق تصویر ۸)
+        const supabaseUrl = 'https://ccusimbyepxhhjxbopbn.supabase.co';
+        const supabaseAnonKey = 'sb_publishable_sqnNTDNwGoibZmFxqi57pg_nqtoK2TU';
+        const _supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
+
         let ario = 0, mini = 150;
 
         function openModal(id) { document.getElementById(id).style.display = 'block'; }
@@ -122,20 +107,23 @@
             document.getElementById('mini-bal').innerText = mini;
         }
 
-        function exchange() {
-            if(mini >= 100) { mini -= 100; ario += 1; updateBalances(); alert("Success: 1 Ario Coin Minted!"); }
-            else { alert("Incomplete: You need 100 Mini-Ario."); }
-        }
+        // گام چهارم: تابع بازی متصل به دیتابیس (طبق تصویر ۳ و ۹)
+        async function checkGame(ans) {
+            if(ans === 16) {
+                mini += 10;
+                updateBalances();
+                
+                // ارسال امتیاز به جدول user_scores در Supabase
+                const { data, error } = await _supabase
+                    .from('user_scores')
+                    .insert([{ username: 'Guest_Ario', score: 10 }]);
 
-        function showManifesto() {
-            const nt = document.getElementById('notif');
-            nt.style.borderLeft = "5px solid var(--gold)";
-            nt.innerHTML = `
-                <h4 style="color:var(--gold); margin:0;">🌐 AQM Manifesto</h4>
-                <p style="font-size:10px; margin-top:8px; line-height:1.4;">
-                    <b>The Future of Collaboration:</b> AQM is the world's first Human-AI innovative partnership. 
-                    Points earned here represent <b>Quantum Influence</b>. We prioritize your privacy above all else.
-                </p>`;
+                if (error) console.error('Supabase Error:', error);
+                else alert("Excellent! Score synced with Database.");
+            } else {
+                alert("Incorrect answer.");
+            }
+            showApp('Games');
         }
 
         function startMiniGame() {
@@ -144,46 +132,30 @@
             nt.innerHTML = `
                 <div style="text-align:center;">
                     <h4 style="color:var(--glow); margin:0;">🎮 Quantum Math</h4>
-                    <p style="font-size:12px; margin:10px 0;">Solve for 10 Mini-Ario: <b>12 + 8 / 2 = ?</b></p>
-                    <div style="display:flex; justify-content:center;">
-                        <button onclick="checkGame(10)" class="game-btn">10</button>
-                        <button onclick="checkGame(16)" class="game-btn">16</button>
-                    </div>
+                    <p style="font-size:12px; margin:10px 0;">12 + 8 / 2 = ?</p>
+                    <button onclick="checkGame(10)" class="game-btn">10</button>
+                    <button onclick="checkGame(16)" class="game-btn">16</button>
                 </div>`;
         }
 
-        function checkGame(ans) {
-            if(ans === 16) { mini += 10; updateBalances(); alert("Correct! +10 Mini-Ario synchronized."); }
-            else { alert("Incorrect. Logic recalibrating..."); }
-            showApp('Games');
+        function showManifesto() {
+            const nt = document.getElementById('notif');
+            nt.style.borderLeft = "5px solid var(--gold)";
+            nt.innerHTML = `
+                <h4 style="color:var(--gold); margin:0;">🌐 AQM Manifesto</h4>
+                <p style="font-size:10px; margin-top:8px;"><b>The Future:</b> World's first Human-AI innovation partnership.</p>`;
         }
 
         function openConnect() {
             document.getElementById('notif').innerHTML = `
-                <h4 style="margin:0; color:var(--tg);">✈️ Community Hub</h4>
-                <a href="#" class="social-link" style="background:var(--tg)">Telegram Network</a>
-                <a href="#" class="social-link" style="background:var(--ig)">Instagram Feed</a>
-                <a href="#" class="social-link" style="background:var(--wa)">WhatsApp Support</a>
-                <a href="#" class="social-link" style="background:var(--fb)">Facebook Page</a>
-                <button onclick="showApp('System')" style="margin-top:5px; background:none; border:none; color:#555; cursor:pointer; width:100%;">Back</button>
-            `;
+                <h4>✈️ Connect</h4>
+                <a href="#" class="social-link" style="background:var(--tg)">Telegram</a>
+                <a href="#" class="social-link" style="background:var(--ig)">Instagram</a>
+                <button onclick="showApp('System')" style="width:100%; background:none; border:none; color:#555; cursor:pointer;">Back</button>`;
         }
 
-        function startIQTest() {
-            document.getElementById('notif').innerHTML = `
-                <h4>🧠 IQ Challenge</h4>
-                <p style="font-size:11px;">Is AQM a collaborative innovation?</p>
-                <button onclick="mini+=5; updateBalances(); showApp('Verified')" style="color:white; background:none; border:1px solid white; cursor:pointer; padding:5px 15px; border-radius:5px;">Yes</button>
-            `;
-        }
-
-        function showApp(name) { 
-            const nt = document.getElementById('notif');
-            nt.style.borderLeft = "5px solid var(--glow)";
-            nt.innerHTML = `<h4 style="margin:0;">🚀 ${name}</h4><p style="font-size:12px; margin-top:8px;">Node active and monitoring for security.</p>`; 
-        }
-
-        function copyLink() { navigator.clipboard.writeText(window.location.href); alert("Encrypted Link Copied!"); }
+        function showApp(name) { document.getElementById('notif').innerHTML = `<h4>🚀 ${name}</h4><p>Node active.</p>`; }
+        function copyLink() { navigator.clipboard.writeText(window.location.href); alert("Link Copied!"); }
     </script>
 </body>
 </html>
