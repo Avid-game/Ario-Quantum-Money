@@ -8,7 +8,7 @@
     <style>
         :root {
             --glow: #00f2fe; --bank-blue: #4facfe; --gold: #fcc419;
-            --yt: #ff0000; --ig: #e1306c; --tg: #0088cc; --music: #a29bfe;
+            --yt: #ff0000; --ig: #e1306c; --tg: #0088cc; --wa: #25d366; --fb: #1877f2; --music: #a29bfe;
         }
         body {
             background: radial-gradient(circle at center, #0a0a1a 0%, #020205 100%);
@@ -18,19 +18,19 @@
         /* Header UI */
         .top-left-tools { position: absolute; top: 20px; left: 25px; display: flex; gap: 15px; z-index: 50; }
         .tool-icon { font-size: 20px; cursor: pointer; opacity: 0.7; transition: 0.3s; }
+        .tool-icon:hover { opacity: 1; transform: scale(1.2); }
         .top-bank { position: absolute; top: 20px; right: 25px; text-align: center; z-index: 50; cursor: pointer; }
         .mini-ario-brain { width: 60px; height: 60px; background: rgba(79, 172, 254, 0.1); border-radius: 50%; border: 2px solid var(--bank-blue); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px var(--bank-blue); }
 
         /* Dashboard Core */
         .container { position: relative; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; }
         .main-brain { width: 180px; height: 180px; border-radius: 50%; background: url('logo.jpg') center/cover; box-shadow: 0 0 60px var(--glow); z-index: 10; border: 2px solid var(--glow); cursor: pointer; transition: 0.5s; }
-        .main-brain:hover { transform: scale(1.05); box-shadow: 0 0 80px var(--glow); }
         
         .node { position: absolute; width: 80px; height: 80px; border-radius: 50%; background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: 0.4s; z-index: 20; }
         .node:hover { transform: scale(1.15); box-shadow: 0 0 20px currentColor; background: rgba(255,255,255,0.1); }
         .node span { font-size: 10px; margin-top: 5px; font-weight: bold; }
 
-        /* Placement */
+        /* Node Placement */
         .n-video { top: 12%; left: 50%; transform: translateX(-50%); color: var(--yt); }
         .n-stories { top: 35%; right: 12%; color: var(--ig); }
         .n-music { top: 35%; left: 12%; color: var(--music); }
@@ -41,17 +41,19 @@
         /* Modals */
         .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 380px; background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(25px); border-radius: 20px; border: 1px solid var(--glow); padding: 20px; z-index: 100; box-shadow: 0 0 50px rgba(0,0,0,1); }
         
-        /* Status & Game Box */
-        .quest-box { position: absolute; bottom: 25px; left: 25px; background: rgba(0,0,0,0.85); padding: 18px; border-radius: 15px; border-left: 5px solid var(--glow); width: 300px; z-index: 30; transition: 0.4s; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        /* Notification & App Box */
+        .quest-box { position: absolute; bottom: 25px; left: 25px; background: rgba(0,0,0,0.85); padding: 18px; border-radius: 15px; border-left: 5px solid var(--glow); width: 300px; z-index: 30; transition: 0.4s; box-shadow: 0 10px 30px rgba(0,0,0,0.5); overflow-y: auto; max-height: 250px; }
         .game-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--glow); color: white; padding: 8px 25px; border-radius: 8px; cursor: pointer; transition: 0.3s; font-weight: bold; margin: 5px; }
-        .game-btn:hover { background: var(--glow); color: black; box-shadow: 0 0 15px var(--glow); }
+        .game-btn:hover { background: var(--glow); color: black; }
 
-        .social-link { display: block; padding: 12px; margin: 8px 0; border-radius: 10px; text-decoration: none; color: white; font-size: 13px; text-align: center; font-weight: bold; transition: 0.3s; }
+        .social-link { display: block; padding: 10px; margin: 5px 0; border-radius: 10px; text-decoration: none; color: white; font-size: 13px; text-align: center; font-weight: bold; transition: 0.3s; }
+        .leader-item { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid rgba(255,255,255,0.1); font-size: 12px; }
     </style>
 </head>
 <body>
 
     <div class="top-left-tools">
+        <div class="tool-icon" title="Leaderboard" onclick="showLeaderboard()">🏆</div>
         <div class="tool-icon" title="Copy Link" onclick="copyLink()">🔗</div>
         <div class="tool-icon" title="Language" onclick="alert('Language: EN/FA')">🌐</div>
     </div>
@@ -66,11 +68,11 @@
         <div style="width:100%; height:210px; background:#000; border-radius:12px; overflow:hidden;">
             <iframe width="100%" height="100%" src="https://www.youtube.com/embed/jfKfPfyJRdk" frameborder="0" allowfullscreen></iframe>
         </div>
-        <button onclick="closeModal('videoModal')" style="width:100%; margin-top:15px; background:#222; color:white; padding:12px; border-radius:10px; border:none; cursor:pointer;">Back to Dashboard</button>
+        <button onclick="closeModal('videoModal')" style="width:100%; margin-top:15px; background:#222; color:white; padding:12px; border-radius:10px; border:none; cursor:pointer;">Close</button>
     </div>
 
     <div id="walletModal" class="modal">
-        <h3 style="color: var(--bank-blue); text-align: center; margin-top:0;">🏦 Asset Ledger</h3>
+        <h3 style="color: var(--bank-blue); text-align: center;">🏦 Asset Ledger</h3>
         <div style="display: flex; justify-content: space-between; margin: 20px 0;"><span>Ario Coins:</span><span id="gold-bal" style="color: var(--gold); font-weight:bold;">0</span></div>
         <div style="display: flex; justify-content: space-between; margin: 20px 0;"><span>Mini-Ario:</span><span id="mini-bal" style="color: var(--bank-blue); font-weight:bold;">150</span></div>
         <button onclick="exchange()" style="width:100%; padding:14px; background:var(--bank-blue); border:none; border-radius:12px; cursor:pointer; color:white; font-weight:bold;">Convert 100 Mini -> 1 Ario</button>
@@ -78,22 +80,22 @@
     </div>
 
     <div class="container">
-        <div class="main-brain" title="Click for Manifesto" onclick="showManifesto()"></div>
+        <div class="main-brain" onclick="showManifesto()"></div>
         <div class="node n-video" onclick="openModal('videoModal')">🎬<span>Videos</span></div>
-        <div class="node n-stories" onclick="showApp('Stories Feed')">📸<span>Stories</span></div>
-        <div class="node n-music" onclick="showApp('Quantum Radio')">🎵<span>Music</span></div>
+        <div class="node n-stories" onclick="showApp('Stories')">📸<span>Stories</span></div>
+        <div class="node n-music" onclick="showApp('Radio')">🎵<span>Music</span></div>
         <div class="node n-games" onclick="startMiniGame()">🎮<span>Games</span></div>
         <div class="node n-iq" onclick="startIQTest()">🧠<span>IQ Test</span></div>
         <div class="node n-social" onclick="openConnect()">✈️<span>Connect</span></div>
     </div>
 
     <div class="quest-box" id="notif">
-        <h4 style="margin:0; color:var(--bank-blue);" id="nt-title">🚀 System Ready</h4>
-        <p id="notif-text" style="font-size: 12px; line-height: 1.5; margin-top:8px;">Quantum Core is online. All nodes are encrypted and secure.</p>
+        <h4 style="margin:0; color:var(--bank-blue);">🚀 System Ready</h4>
+        <p style="font-size: 12px; margin-top:8px;">All quantum nodes are operational.</p>
     </div>
 
     <script>
-        // تنظیمات اتصال از تصویر ۸
+        // اتصال به دیتابیس آریو کوانتوم
         const supabaseUrl = 'https://ccusimbyepxhhjxbopbn.supabase.co';
         const supabaseAnonKey = 'sb_publishable_sqnNTDNwGoibZmFxqi57pg_nqtoK2TU';
         const _supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
@@ -107,89 +109,89 @@
             document.getElementById('mini-bal').innerText = mini;
         }
 
-        // ذخیره امتیاز در سوپابیس
-        async function saveToDB(points, type) {
-            const { error } = await _supabase
-                .from('user_scores')
-                .insert([{ username: 'Guest_Ario', score: points }]);
-            if (error) console.error('Database Error:', error);
+        // ذخیره در دیتابیس
+        async function saveScore(points) {
+            await _supabase.from('user_scores').insert([{ username: 'Explorer', score: points }]);
         }
 
-        // بازی ریاضی
+        // خواندن نفرات برتر از دیتابیس
+        async function showLeaderboard() {
+            const nt = document.getElementById('notif');
+            nt.innerHTML = `<h4 style="color:var(--gold);">🏆 Loading Rankings...</h4>`;
+            
+            const { data, error } = await _supabase
+                .from('user_scores')
+                .select('username, score')
+                .order('score', { ascending: false })
+                .limit(5);
+
+            if (error) { nt.innerHTML = `<h4>Error loading data.</h4>`; return; }
+
+            let html = `<h4 style="color:var(--gold); margin:0 0 10px 0;">🏆 Top Pioneers</h4>`;
+            data.forEach((u, i) => {
+                html += `<div class="leader-item"><span>${i+1}. ${u.username}</span><b>${u.score}</b></div>`;
+            });
+            html += `<button onclick="showApp('System')" style="width:100%; margin-top:10px; background:none; border:none; color:gray; cursor:pointer;">Back</button>`;
+            nt.innerHTML = html;
+        }
+
+        // بازی‌ها
         async function checkGame(ans) {
-            if(ans === 16) {
-                mini += 10; updateBalances();
-                await saveToDB(10, 'Math');
-                alert("Correct! +10 Mini-Ario Synced with Database.");
-            } else { alert("Incorrect."); }
+            if(ans === 16) { 
+                mini += 10; updateBalances(); await saveScore(10);
+                alert("Correct! Synced to Database.");
+            } else alert("Incorrect.");
             showApp('Games');
         }
 
         function startMiniGame() {
-            const nt = document.getElementById('notif');
-            nt.style.borderLeft = "5px solid var(--glow)";
-            nt.innerHTML = `
+            document.getElementById('notif').innerHTML = `
                 <div style="text-align:center;">
-                    <h4 style="color:var(--glow); margin:0;">🎮 Quantum Math</h4>
-                    <p style="font-size:12px; margin:10px 0;">Solve: <b>12 + 8 / 2 = ?</b></p>
+                    <h4 style="color:var(--glow); margin:0;">🎮 Math Node</h4>
+                    <p style="font-size:12px; margin:10px 0;">12 + 8 / 2 = ?</p>
                     <button onclick="checkGame(10)" class="game-btn">10</button>
                     <button onclick="checkGame(16)" class="game-btn">16</button>
                 </div>`;
         }
 
-        // بخش جدید: IQ TEST
         function startIQTest() {
-            const nt = document.getElementById('notif');
-            nt.style.borderLeft = "5px solid var(--gold)";
-            nt.innerHTML = `
+            document.getElementById('notif').innerHTML = `
                 <div style="text-align:center;">
-                    <h4 style="color:var(--gold); margin:0;">🧠 Quantum IQ</h4>
+                    <h4 style="color:var(--gold); margin:0;">🧠 IQ Node</h4>
                     <p style="font-size:11px; margin:10px 0;">If 2+2=魚, then 3+3=?</p>
-                    <button onclick="checkIQ(8)" class="game-btn">8</button>
                     <button onclick="checkIQ('8-bit')" class="game-btn">∞</button>
+                    <button onclick="checkIQ(8)" class="game-btn">8</button>
                 </div>`;
         }
 
-        async function checkIQ(val) {
-            if(val === '8-bit') {
-                mini += 50; updateBalances();
-                await saveToDB(50, 'IQ');
-                alert("Genius! +50 Mini-Ario Synced.");
-            } else { alert("Recalibrating Logic..."); }
+        async function checkIQ(v) {
+            if(v==='8-bit') { mini += 50; updateBalances(); await saveScore(50); alert("Genius Level Detected!"); }
             showApp('IQ Test');
         }
 
-        function showManifesto() {
-            const nt = document.getElementById('notif');
-            nt.style.borderLeft = "5px solid var(--gold)";
-            nt.innerHTML = `
-                <h4 style="color:var(--gold); margin:0;">🌐 AQM Manifesto</h4>
-                <p style="font-size:10px; margin-top:8px; line-height:1.4;">
-                    <b>Human-AI Collaboration:</b> Points earned here represent <b>Quantum Influence</b>. 
-                    We prioritize your privacy above all else.
-                </p>`;
-        }
-
+        // بخش Connect (بازگشت واتس‌اپ و فیس‌بوک)
         function openConnect() {
             document.getElementById('notif').innerHTML = `
-                <h4 style="margin:0; color:var(--tg);">✈️ Community</h4>
+                <h4 style="margin:0; color:var(--tg);">✈️ Connect Platforms</h4>
                 <a href="#" class="social-link" style="background:var(--tg)">Telegram</a>
                 <a href="#" class="social-link" style="background:var(--ig)">Instagram</a>
-                <button onclick="showApp('System')" style="width:100%; background:none; border:none; color:#555; cursor:pointer;">Back</button>`;
+                <a href="#" class="social-link" style="background:var(--wa)">WhatsApp</a>
+                <a href="#" class="social-link" style="background:var(--fb)">Facebook</a>
+                <button onclick="showApp('System')" style="width:100%; background:none; border:none; color:#555; cursor:pointer; margin-top:5px;">Back</button>`;
         }
 
-        function showApp(name) { 
-            const nt = document.getElementById('notif');
-            nt.style.borderLeft = "5px solid var(--glow)";
-            nt.innerHTML = `<h4 style="margin:0;">🚀 ${name}</h4><p style="font-size:12px; margin-top:8px;">Node active and monitoring.</p>`; 
+        function showManifesto() {
+            document.getElementById('notif').innerHTML = `
+                <h4 style="color:var(--gold); margin:0;">🌐 AQM Manifesto</h4>
+                <p style="font-size:10px; margin-top:8px;">The world's first Human-AI innovation partnership. Points represent <b>Quantum Influence</b>.</p>`;
         }
 
+        function showApp(n) { document.getElementById('notif').innerHTML = `<h4>🚀 ${n}</h4><p style="font-size:12px;">Node Active.</p>`; }
         function exchange() {
             if(mini >= 100) { mini -= 100; ario += 1; updateBalances(); alert("1 Ario Coin Minted!"); }
-            else { alert("Need 100 Mini-Ario."); }
+            else alert("Need 100 Mini-Ario.");
         }
-
-        function copyLink() { navigator.clipboard.writeText(window.location.href); alert("Encrypted Link Copied!"); }
+        function copyLink() { navigator.clipboard.writeText(window.location.href); alert("Link Copied!"); }
     </script>
 </body>
 </html>
