@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AQM Dashboard | Quantum Intelligence</title>
+    <title>AQM Dashboard | Quantum Unified</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
@@ -41,7 +41,7 @@
         /* Modals */
         .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 380px; background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(25px); border-radius: 20px; border: 1px solid var(--glow); padding: 20px; z-index: 100; box-shadow: 0 0 50px rgba(0,0,0,1); }
         
-        /* Notification & App Box */
+        /* Box UI */
         .quest-box { position: absolute; bottom: 25px; left: 25px; background: rgba(0,0,0,0.85); padding: 18px; border-radius: 15px; border-left: 5px solid var(--glow); width: 300px; z-index: 30; transition: 0.4s; box-shadow: 0 10px 30px rgba(0,0,0,0.5); overflow-y: auto; max-height: 250px; }
         .game-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--glow); color: white; padding: 8px 25px; border-radius: 8px; cursor: pointer; transition: 0.3s; font-weight: bold; margin: 5px; }
         .game-btn:hover { background: var(--glow); color: black; }
@@ -95,7 +95,7 @@
     </div>
 
     <script>
-        // اتصال به دیتابیس آریو کوانتوم
+        // Supabase Connection
         const supabaseUrl = 'https://ccusimbyepxhhjxbopbn.supabase.co';
         const supabaseAnonKey = 'sb_publishable_sqnNTDNwGoibZmFxqi57pg_nqtoK2TU';
         const _supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
@@ -109,38 +109,43 @@
             document.getElementById('mini-bal').innerText = mini;
         }
 
-        // ذخیره در دیتابیس
         async function saveScore(points) {
             await _supabase.from('user_scores').insert([{ username: 'Explorer', score: points }]);
         }
 
-        // خواندن نفرات برتر از دیتابیس
         async function showLeaderboard() {
             const nt = document.getElementById('notif');
-            nt.innerHTML = `<h4 style="color:var(--gold);">🏆 Loading Rankings...</h4>`;
-            
-            const { data, error } = await _supabase
-                .from('user_scores')
-                .select('username, score')
-                .order('score', { ascending: false })
-                .limit(5);
-
-            if (error) { nt.innerHTML = `<h4>Error loading data.</h4>`; return; }
-
+            nt.innerHTML = `<h4 style="color:var(--gold);">🏆 Loading...</h4>`;
+            const { data, error } = await _supabase.from('user_scores').select('username, score').order('score', { ascending: false }).limit(5);
+            if (error) { nt.innerHTML = `<h4>Error.</h4>`; return; }
             let html = `<h4 style="color:var(--gold); margin:0 0 10px 0;">🏆 Top Pioneers</h4>`;
-            data.forEach((u, i) => {
-                html += `<div class="leader-item"><span>${i+1}. ${u.username}</span><b>${u.score}</b></div>`;
-            });
+            data.forEach((u, i) => { html += `<div class="leader-item"><span>${i+1}. ${u.username}</span><b>${u.score}</b></div>`; });
             html += `<button onclick="showApp('System')" style="width:100%; margin-top:10px; background:none; border:none; color:gray; cursor:pointer;">Back</button>`;
             nt.innerHTML = html;
         }
 
-        // بازی‌ها
+        // --- THE UNIFIED showApp FUNCTION ---
+        function showApp(n) {
+            const nt = document.getElementById('notif');
+            if(n === 'Radio') {
+                nt.style.borderLeft = "5px solid var(--music)";
+                nt.innerHTML = `
+                    <h4 style="margin:0; color:var(--music);">🎵 Quantum Radio</h4>
+                    <p style="font-size:11px; margin:10px 0;">Lo-fi Beats to Innovate to...</p>
+                    <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1DWWQRwui0Ex7X?utm_source=generator&theme=0" width="100%" height="80" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+                    <button onclick="showApp('System')" style="width:100%; margin-top:10px; background:none; border:none; color:gray; cursor:pointer;">Stop Radio</button>
+                `;
+            } else if(n === 'System') {
+                nt.style.borderLeft = "5px solid var(--bank-blue)";
+                nt.innerHTML = `<h4 style="margin:0; color:var(--bank-blue);">🚀 System Ready</h4><p style="font-size:12px; margin-top:8px;">Operational.</p>`;
+            } else {
+                nt.style.borderLeft = "5px solid var(--glow)";
+                nt.innerHTML = `<h4 style="margin:0;">🚀 ${n}</h4><p style="font-size:12px; margin-top:8px;">Node active and monitoring.</p>`;
+            }
+        }
+
         async function checkGame(ans) {
-            if(ans === 16) { 
-                mini += 10; updateBalances(); await saveScore(10);
-                alert("Correct! Synced to Database.");
-            } else alert("Incorrect.");
+            if(ans === 16) { mini += 10; updateBalances(); await saveScore(10); alert("Correct!"); }
             showApp('Games');
         }
 
@@ -165,11 +170,10 @@
         }
 
         async function checkIQ(v) {
-            if(v==='8-bit') { mini += 50; updateBalances(); await saveScore(50); alert("Genius Level Detected!"); }
+            if(v==='8-bit') { mini += 50; updateBalances(); await saveScore(50); alert("Genius Level!"); }
             showApp('IQ Test');
         }
 
-        // بخش Connect (بازگشت واتس‌اپ و فیس‌بوک)
         function openConnect() {
             document.getElementById('notif').innerHTML = `
                 <h4 style="margin:0; color:var(--tg);">✈️ Connect Platforms</h4>
@@ -183,10 +187,9 @@
         function showManifesto() {
             document.getElementById('notif').innerHTML = `
                 <h4 style="color:var(--gold); margin:0;">🌐 AQM Manifesto</h4>
-                <p style="font-size:10px; margin-top:8px;">The world's first Human-AI innovation partnership. Points represent <b>Quantum Influence</b>.</p>`;
+                <p style="font-size:10px; margin-top:8px;">The world's first Human-AI innovation partnership.</p>`;
         }
 
-        function showApp(n) { document.getElementById('notif').innerHTML = `<h4>🚀 ${n}</h4><p style="font-size:12px;">Node Active.</p>`; }
         function exchange() {
             if(mini >= 100) { mini -= 100; ario += 1; updateBalances(); alert("1 Ario Coin Minted!"); }
             else alert("Need 100 Mini-Ario.");
