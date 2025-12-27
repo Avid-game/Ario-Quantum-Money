@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AQM Dashboard | Secure Vault</title>
+    <title>AQM Dashboard | Full System Active</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
@@ -15,14 +15,12 @@
             color: white; font-family: 'Segoe UI', sans-serif; margin: 0; height: 100vh; overflow: hidden;
         }
 
-        /* Header UI */
         .top-left-tools { position: absolute; top: 20px; left: 25px; display: flex; gap: 15px; z-index: 50; }
         .tool-icon { font-size: 20px; cursor: pointer; opacity: 0.7; transition: 0.3s; }
         .tool-icon:hover { opacity: 1; transform: scale(1.2); }
         .top-bank { position: absolute; top: 20px; right: 25px; text-align: center; z-index: 50; cursor: pointer; }
         .mini-ario-brain { width: 60px; height: 60px; background: rgba(79, 172, 254, 0.1); border-radius: 50%; border: 2px solid var(--bank-blue); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px var(--bank-blue); }
 
-        /* Dashboard Core */
         .container { position: relative; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; }
         .main-brain { width: 180px; height: 180px; border-radius: 50%; background: url('logo.jpg') center/cover; box-shadow: 0 0 60px var(--glow); z-index: 10; border: 2px solid var(--glow); cursor: pointer; transition: 0.5s; }
         
@@ -30,7 +28,6 @@
         .node:hover { transform: scale(1.15); box-shadow: 0 0 20px currentColor; background: rgba(255,255,255,0.1); }
         .node span { font-size: 10px; margin-top: 5px; font-weight: bold; }
 
-        /* Placement */
         .n-video { top: 12%; left: 50%; transform: translateX(-50%); color: var(--yt); }
         .n-roadmap { top: 35%; right: 12%; color: var(--ig); }
         .n-music { top: 35%; left: 12%; color: var(--music); }
@@ -38,13 +35,10 @@
         .n-iq { bottom: 35%; left: 12%; color: var(--gold); }
         .n-social { bottom: 12%; left: 50%; transform: translateX(-50%); color: var(--tg); }
 
-        /* Modals */
         .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 380px; background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(25px); border-radius: 20px; border: 1px solid var(--glow); padding: 20px; z-index: 100; box-shadow: 0 0 50px rgba(0,0,0,1); }
-        .quest-box { position: absolute; bottom: 25px; left: 25px; background: rgba(0,0,0,0.85); padding: 18px; border-radius: 15px; border-left: 5px solid var(--glow); width: 310px; z-index: 30; transition: 0.4s; }
-        .game-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--glow); color: white; padding: 8px 25px; border-radius: 8px; cursor: pointer; transition: 0.3s; font-weight: bold; margin: 5px; }
-        
-        /* Visual Roadmap Elements */
-        .roadmap-img { width: 100%; height: 100px; background: #111; border-radius: 10px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; color: #333; font-weight: bold; overflow: hidden; }
+        .quest-box { position: absolute; bottom: 25px; left: 25px; background: rgba(0,0,0,0.85); padding: 18px; border-radius: 15px; border-left: 5px solid var(--glow); width: 310px; z-index: 30; }
+        .game-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--glow); color: white; padding: 8px 25px; border-radius: 8px; cursor: pointer; margin: 5px; }
+        .social-link { display: block; padding: 10px; margin: 5px 0; border-radius: 10px; text-decoration: none; color: white; font-size: 13px; text-align: center; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -72,13 +66,13 @@
 
     <div class="quest-box" id="notif">
         <h4 style="margin:0; color:var(--bank-blue);">🚀 AQM Secure</h4>
-        <p id="notif-text" style="font-size: 12px; margin-top:8px;">Ready for command.</p>
+        <p id="notif-text" style="font-size: 12px; margin-top:8px;">System Active.</p>
     </div>
 
     <div id="videoModal" class="modal">
         <h4 style="color:var(--yt); margin:0 0 10px 0;">🎬 Quantum Shorts</h4>
         <iframe width="100%" height="210" src="https://www.youtube.com/embed/jfKfPfyJRdk" frameborder="0" allowfullscreen style="border-radius:12px;"></iframe>
-        <button onclick="closeModal('videoModal')" style="width:100%; margin-top:15px; background:#222; color:white; padding:10px; border:none; border-radius:8px; cursor:pointer;">Close</button>
+        <button onclick="closeModal('videoModal')" style="width:100%; margin-top:15px; background:#222; color:white; padding:10px; border-radius:8px; border:none; cursor:pointer;">Close</button>
     </div>
 
     <div id="walletModal" class="modal">
@@ -98,7 +92,6 @@
         let userName = localStorage.getItem('aqm_user') || "";
         let userPin = localStorage.getItem('aqm_pin') || "";
 
-        // Audio System
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playClick() {
             const osc = audioCtx.createOscillator();
@@ -116,8 +109,8 @@
         };
 
         function initProfile() {
-            const name = prompt("Enter your Pioneer Name:");
-            const pin = prompt("Set a 4-digit Secure PIN for your Assets:");
+            const name = prompt("Enter Name:");
+            const pin = prompt("Set 4-digit PIN:");
             if (name && pin) {
                 userName = name; userPin = pin;
                 localStorage.setItem('aqm_user', name);
@@ -127,63 +120,57 @@
         }
 
         function openVault() {
-            const input = prompt("Enter PIN to Access Assets:");
-            if (input === userPin) openModal('walletModal');
-            else alert("⚠️ Access Denied: Incorrect PIN");
+            if (prompt("Enter PIN:") === userPin) openModal('walletModal');
+            else alert("Incorrect PIN");
         }
 
-        function logout() {
-            if(confirm("Secure Logout? You will need to re-enter details.")) {
-                localStorage.clear();
-                location.reload();
-            }
-        }
-
+        function logout() { if(confirm("Logout?")) { localStorage.clear(); location.reload(); } }
         function openModal(id) { document.getElementById(id).style.display = 'block'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
         function updateBalances() { document.getElementById('gold-bal').innerText = ario; document.getElementById('mini-bal').innerText = mini; }
-        function copyLink() { navigator.clipboard.writeText(window.location.href); alert("Link Copied!"); }
-
         async function saveScore(p) { await _supabase.from('user_scores').insert([{ username: userName || "Guest", score: p }]); }
 
         function showApp(n) {
             const nt = document.getElementById('notif');
             if(n === 'Roadmap') {
                 nt.style.borderLeft = "5px solid var(--ig)";
-                nt.innerHTML = `
-                    <h4 style="color:var(--ig); margin:0;">🗺️ Visual Roadmap</h4>
-                    <div class="roadmap-img" style="background: linear-gradient(45deg, #111, #222);">[PHASE 1: GENESIS]</div>
-                    <p style="font-size:10px; line-height:1.4;">The foundation of AQM is live. Next: AI Neural integration and Metaverse expansions.</p>
-                    <button onclick="showApp('System')" style="width:100%; margin-top:5px; background:none; border:none; color:gray; cursor:pointer;">Back</button>`;
+                nt.innerHTML = `<h4 style="color:var(--ig); margin:0;">🗺️ Roadmap</h4><p style="font-size:10px;">Phase 1: Genesis (Live)<br>Phase 2: AI Voice<br>Phase 3: Metaverse</p><button onclick="showApp('System')" style="width:100%; margin-top:5px; background:none; border:none; color:gray; cursor:pointer;">Back</button>`;
             } else if(n === 'System') {
                 nt.style.borderLeft = "5px solid var(--bank-blue)";
-                nt.innerHTML = `<h4 style="color:var(--bank-blue); margin:0;">🚀 Welcome, ${userName || 'Pioneer'}</h4><p style="font-size:12px; margin-top:8px;">Identity Secured. Nodes operational.</p>`;
+                nt.innerHTML = `<h4 style="color:var(--bank-blue); margin:0;">🚀 Welcome, ${userName || 'Pioneer'}</h4><p style="font-size:12px;">Security Level: <b>HIGH</b></p>`;
             } else if(n === 'Radio') {
                 nt.style.borderLeft = "5px solid var(--music)";
-                nt.innerHTML = `<h4 style="color:var(--music); margin:0;">🎵 Quantum Radio</h4><p style="font-size:11px;">Broadcasting Lo-Fi...</p><button onclick="showApp('System')" style="width:100%; margin-top:10px; background:none; border:none; color:gray; cursor:pointer;">Stop</button>`;
+                nt.innerHTML = `<h4 style="color:var(--music); margin:0;">🎵 Radio</h4><p style="font-size:11px;">Lo-Fi Active.</p><button onclick="showApp('System')" style="width:100%; margin-top:10px; background:none; border:none; color:gray; cursor:pointer;">Stop</button>`;
             }
         }
 
         function startMiniGame() {
-            document.getElementById('notif').innerHTML = `<h4 style="color:var(--glow); margin:0;">🎮 Math Node</h4><p style="font-size:12px; margin:10px 0;">12 + 8 / 2 = ?</p><button onclick="checkGame(16)" class="game-btn">16</button><button onclick="checkGame(10)" class="game-btn">10</button>`;
+            document.getElementById('notif').innerHTML = `<h4 style="color:var(--glow); margin:0;">🎮 Math Node</h4><p style="font-size:12px;">12 + 8 / 2 = ?</p><button onclick="checkGame(16)" class="game-btn">16</button><button onclick="checkGame(10)" class="game-btn">10</button>`;
         }
-        async function checkGame(ans) { if(ans===16) { mini+=10; updateBalances(); await saveScore(10); alert(`Nice, ${userName}! +10 Mini.`); } showApp('System'); }
+        async function checkGame(ans) { if(ans===16) { mini+=10; updateBalances(); await saveScore(10); alert("Correct!"); } showApp('System'); }
+
+        function startIQTest() {
+            document.getElementById('notif').innerHTML = `<h4 style="color:var(--gold); margin:0;">🧠 IQ Node</h4><p style="font-size:11px;">If 2+2=魚, then 3+3=?</p><button onclick="checkIQ('8-bit')" class="game-btn">∞</button><button onclick="checkIQ(8)" class="game-btn">8</button>`;
+        }
+        async function checkIQ(v) { if(v==='8-bit') { mini+=50; updateBalances(); await saveScore(50); alert("Genius!"); } showApp('System'); }
+
+        function openConnect() {
+            document.getElementById('notif').innerHTML = `<h4 style="color:var(--tg); margin:0;">✈️ Connect</h4><a href="#" class="social-link" style="background:var(--tg)">Telegram</a><a href="#" class="social-link" style="background:var(--ig)">Instagram</a><button onclick="showApp('System')" style="width:100%; background:none; border:none; color:gray; cursor:pointer;">Back</button>`;
+        }
 
         async function showLeaderboard() {
             const nt = document.getElementById('notif');
-            nt.innerHTML = `<h4 style="color:var(--gold);">🏆 Syncing...</h4>`;
+            nt.innerHTML = `<h4>🏆 Syncing...</h4>`;
             const { data } = await _supabase.from('user_scores').select('username, score').order('score', { ascending: false }).limit(5);
-            let html = `<h4 style="color:var(--gold); margin:0 0 10px 0;">🏆 Top Pioneers</h4>`;
-            if(data) data.forEach((u, i) => { html += `<div style="display:flex; justify-content:space-between; font-size:11px; padding:3px 0; border-bottom:1px solid #222;"><span>${i+1}. ${u.username}</span><b>${u.score}</b></div>`; });
-            html += `<button onclick="showApp('System')" style="width:100%; margin-top:10px; background:none; border:none; color:gray; cursor:pointer;">Back</button>`;
+            let html = `<h4 style="color:var(--gold);">🏆 Top Pioneers</h4>`;
+            if(data) data.forEach((u, i) => { html += `<div style="display:flex; justify-content:space-between; font-size:11px; border-bottom:1px solid #222;"><span>${i+1}. ${u.username}</span><b>${u.score}</b></div>`; });
+            html += `<button onclick="showApp('System')" style="width:100%; margin-top:5px; background:none; border:none; color:gray; cursor:pointer;">Back</button>`;
             nt.innerHTML = html;
         }
 
-        function openConnect() {
-            document.getElementById('notif').innerHTML = `<h4 style="color:var(--tg); margin:0;">✈️ Connect</h4><a href="#" class="social-link" style="background:var(--tg)">Telegram</a><a href="#" class="social-link" style="background:var(--wa)">WhatsApp</a><button onclick="showApp('System')" style="width:100%; background:none; border:none; color:gray; cursor:pointer; margin-top:10px;">Back</button>`;
-        }
-        function showManifesto() { document.getElementById('notif').innerHTML = `<h4 style="color:var(--gold); margin:0;">🌐 AQM Manifesto</h4><p style="font-size:10px; margin-top:8px;">Human-AI Collaboration 1.0. User: <b>${userName}</b></p>`; }
+        function showManifesto() { document.getElementById('notif').innerHTML = `<h4 style="color:var(--gold); margin:0;">🌐 Manifesto</h4><p style="font-size:10px;">Human-AI Future. User: ${userName}</p>`; }
         function exchange() { if(mini >= 100) { mini -= 100; ario += 1; updateBalances(); alert("1 Ario Minted!"); } else alert("Need 100 Mini."); }
+        function copyLink() { navigator.clipboard.writeText(window.location.href); alert("Link Copied!"); }
     </script>
 </body>
 </html>
