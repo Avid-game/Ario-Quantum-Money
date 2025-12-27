@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AQM Dashboard | Quantum Unified</title>
+    <title>AQM Dashboard | Quantum Identity</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
@@ -30,7 +30,7 @@
         .node:hover { transform: scale(1.15); box-shadow: 0 0 20px currentColor; background: rgba(255,255,255,0.1); }
         .node span { font-size: 10px; margin-top: 5px; font-weight: bold; }
 
-        /* Node Placement */
+        /* Placement */
         .n-video { top: 12%; left: 50%; transform: translateX(-50%); color: var(--yt); }
         .n-stories { top: 35%; right: 12%; color: var(--ig); }
         .n-music { top: 35%; left: 12%; color: var(--music); }
@@ -41,7 +41,7 @@
         /* Modals */
         .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 380px; background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(25px); border-radius: 20px; border: 1px solid var(--glow); padding: 20px; z-index: 100; box-shadow: 0 0 50px rgba(0,0,0,1); }
         
-        /* Box UI */
+        /* Notification & App Box */
         .quest-box { position: absolute; bottom: 25px; left: 25px; background: rgba(0,0,0,0.85); padding: 18px; border-radius: 15px; border-left: 5px solid var(--glow); width: 300px; z-index: 30; transition: 0.4s; box-shadow: 0 10px 30px rgba(0,0,0,0.5); overflow-y: auto; max-height: 250px; }
         .game-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--glow); color: white; padding: 8px 25px; border-radius: 8px; cursor: pointer; transition: 0.3s; font-weight: bold; margin: 5px; }
         .game-btn:hover { background: var(--glow); color: black; }
@@ -54,8 +54,8 @@
 
     <div class="top-left-tools">
         <div class="tool-icon" title="Leaderboard" onclick="showLeaderboard()">🏆</div>
+        <div class="tool-icon" title="Change Name" onclick="askForName()">👤</div>
         <div class="tool-icon" title="Copy Link" onclick="copyLink()">🔗</div>
-        <div class="tool-icon" title="Language" onclick="alert('Language: EN/FA')">🌐</div>
     </div>
 
     <div class="top-bank" onclick="openModal('walletModal')">
@@ -82,7 +82,7 @@
     <div class="container">
         <div class="main-brain" onclick="showManifesto()"></div>
         <div class="node n-video" onclick="openModal('videoModal')">🎬<span>Videos</span></div>
-        <div class="node n-stories" onclick="showApp('Stories')">📸<span>Stories</span></div>
+        <div class="node n-stories" onclick="showApp('Roadmap')">📸<span>Roadmap</span></div>
         <div class="node n-music" onclick="showApp('Radio')">🎵<span>Music</span></div>
         <div class="node n-games" onclick="startMiniGame()">🎮<span>Games</span></div>
         <div class="node n-iq" onclick="startIQTest()">🧠<span>IQ Test</span></div>
@@ -90,8 +90,8 @@
     </div>
 
     <div class="quest-box" id="notif">
-        <h4 style="margin:0; color:var(--bank-blue);">🚀 System Ready</h4>
-        <p style="font-size: 12px; margin-top:8px;">All quantum nodes are operational.</p>
+        <h4 style="margin:0; color:var(--bank-blue);" id="nt-title">🚀 System Loading</h4>
+        <p id="notif-text" style="font-size: 12px; margin-top:8px;">Initializing Quantum Identity...</p>
     </div>
 
     <script>
@@ -101,93 +101,91 @@
         const _supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
 
         let ario = 0, mini = 150;
+        let userName = localStorage.getItem('aqm_user') || "";
+
+        // Initialization
+        window.onload = function() {
+            if (!userName) {
+                askForName();
+            } else {
+                showApp('System');
+            }
+            updateBalances();
+        };
+
+        function askForName() {
+            const name = prompt("Enter your Pioneer Name for AQM Network:", userName || "Explorer");
+            if (name) {
+                userName = name;
+                localStorage.setItem('aqm_user', name);
+                showApp('System');
+            }
+        }
 
         function openModal(id) { document.getElementById(id).style.display = 'block'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        
         function updateBalances() {
             document.getElementById('gold-bal').innerText = ario;
             document.getElementById('mini-bal').innerText = mini;
         }
 
         async function saveScore(points) {
-            await _supabase.from('user_scores').insert([{ username: 'Explorer', score: points }]);
+            await _supabase.from('user_scores').insert([{ username: userName || "Guest", score: points }]);
         }
 
         async function showLeaderboard() {
             const nt = document.getElementById('notif');
-            nt.innerHTML = `<h4 style="color:var(--gold);">🏆 Loading...</h4>`;
+            nt.innerHTML = `<h4 style="color:var(--gold);">🏆 Syncing Rankings...</h4>`;
             const { data, error } = await _supabase.from('user_scores').select('username, score').order('score', { ascending: false }).limit(5);
-            if (error) { nt.innerHTML = `<h4>Error.</h4>`; return; }
+            if (error) { nt.innerHTML = `<h4>Error loading data.</h4>`; return; }
             let html = `<h4 style="color:var(--gold); margin:0 0 10px 0;">🏆 Top Pioneers</h4>`;
             data.forEach((u, i) => { html += `<div class="leader-item"><span>${i+1}. ${u.username}</span><b>${u.score}</b></div>`; });
             html += `<button onclick="showApp('System')" style="width:100%; margin-top:10px; background:none; border:none; color:gray; cursor:pointer;">Back</button>`;
             nt.innerHTML = html;
         }
 
-        // --- THE UNIFIED showApp FUNCTION ---
         function showApp(n) {
             const nt = document.getElementById('notif');
             if(n === 'Radio') {
                 nt.style.borderLeft = "5px solid var(--music)";
-                nt.innerHTML = `
-                    <h4 style="margin:0; color:var(--music);">🎵 Quantum Radio</h4>
-                    <p style="font-size:11px; margin:10px 0;">Lo-fi Beats to Innovate to...</p>
-                    <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1DWWQRwui0Ex7X?utm_source=generator&theme=0" width="100%" height="80" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
-                    <button onclick="showApp('System')" style="width:100%; margin-top:10px; background:none; border:none; color:gray; cursor:pointer;">Stop Radio</button>
-                `;
+                nt.innerHTML = `<h4 style="margin:0; color:var(--music);">🎵 Quantum Radio</h4><p style="font-size:11px; margin:10px 0;">Lo-fi Beats for Innovators...</p><iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/37i9dQZF1DWWQRwui0Ex7X?utm_source=generator&theme=0" width="100%" height="80" frameBorder="0" allow="autoplay; encrypted-media;"></iframe><button onclick="showApp('System')" style="width:100%; margin-top:10px; background:none; border:none; color:gray; cursor:pointer;">Stop</button>`;
             } else if(n === 'System') {
                 nt.style.borderLeft = "5px solid var(--bank-blue)";
-                nt.innerHTML = `<h4 style="margin:0; color:var(--bank-blue);">🚀 System Ready</h4><p style="font-size:12px; margin-top:8px;">Operational.</p>`;
+                nt.innerHTML = `<h4 style="margin:0; color:var(--bank-blue);">🚀 Welcome, ${userName || 'Pioneer'}</h4><p style="font-size:12px; margin-top:8px;">Identity confirmed. All nodes operational.</p>`;
+            } else if(n === 'Roadmap') {
+                nt.style.borderLeft = "5px solid var(--ig)";
+                nt.innerHTML = `<h4 style="color:var(--ig); margin:0;">🗺️ AQM Roadmap</h4><p style="font-size:10px; margin-top:8px;"><b>Q1:</b> Launch Dashboard<br><b>Q2:</b> AI Personality Integration<br><b>Q3:</b> Metaverse Alpha Release</p><button onclick="showApp('System')" style="width:100%; margin-top:10px; background:none; border:none; color:gray; cursor:pointer;">Back</button>`;
             } else {
                 nt.style.borderLeft = "5px solid var(--glow)";
-                nt.innerHTML = `<h4 style="margin:0;">🚀 ${n}</h4><p style="font-size:12px; margin-top:8px;">Node active and monitoring.</p>`;
+                nt.innerHTML = `<h4 style="margin:0;">🚀 ${n}</h4><p style="font-size:12px; margin-top:8px;">Node active.</p>`;
             }
         }
 
         async function checkGame(ans) {
-            if(ans === 16) { mini += 10; updateBalances(); await saveScore(10); alert("Correct!"); }
+            if(ans === 16) { mini += 10; updateBalances(); await saveScore(10); alert(`Great job, ${userName}! +10 Mini-Ario.`); }
             showApp('Games');
         }
 
         function startMiniGame() {
-            document.getElementById('notif').innerHTML = `
-                <div style="text-align:center;">
-                    <h4 style="color:var(--glow); margin:0;">🎮 Math Node</h4>
-                    <p style="font-size:12px; margin:10px 0;">12 + 8 / 2 = ?</p>
-                    <button onclick="checkGame(10)" class="game-btn">10</button>
-                    <button onclick="checkGame(16)" class="game-btn">16</button>
-                </div>`;
+            document.getElementById('notif').innerHTML = `<div style="text-align:center;"><h4 style="color:var(--glow); margin:0;">🎮 Math Node</h4><p style="font-size:12px; margin:10px 0;">12 + 8 / 2 = ?</p><button onclick="checkGame(10)" class="game-btn">10</button><button onclick="checkGame(16)" class="game-btn">16</button></div>`;
         }
 
         function startIQTest() {
-            document.getElementById('notif').innerHTML = `
-                <div style="text-align:center;">
-                    <h4 style="color:var(--gold); margin:0;">🧠 IQ Node</h4>
-                    <p style="font-size:11px; margin:10px 0;">If 2+2=魚, then 3+3=?</p>
-                    <button onclick="checkIQ('8-bit')" class="game-btn">∞</button>
-                    <button onclick="checkIQ(8)" class="game-btn">8</button>
-                </div>`;
+            document.getElementById('notif').innerHTML = `<div style="text-align:center;"><h4 style="color:var(--gold); margin:0;">🧠 IQ Node</h4><p style="font-size:11px; margin:10px 0;">If 2+2=魚, then 3+3=?</p><button onclick="checkIQ('8-bit')" class="game-btn">∞</button><button onclick="checkIQ(8)" class="game-btn">8</button></div>`;
         }
 
         async function checkIQ(v) {
-            if(v==='8-bit') { mini += 50; updateBalances(); await saveScore(50); alert("Genius Level!"); }
+            if(v==='8-bit') { mini += 50; updateBalances(); await saveScore(50); alert("Genius detected!"); }
             showApp('IQ Test');
         }
 
         function openConnect() {
-            document.getElementById('notif').innerHTML = `
-                <h4 style="margin:0; color:var(--tg);">✈️ Connect Platforms</h4>
-                <a href="#" class="social-link" style="background:var(--tg)">Telegram</a>
-                <a href="#" class="social-link" style="background:var(--ig)">Instagram</a>
-                <a href="#" class="social-link" style="background:var(--wa)">WhatsApp</a>
-                <a href="#" class="social-link" style="background:var(--fb)">Facebook</a>
-                <button onclick="showApp('System')" style="width:100%; background:none; border:none; color:#555; cursor:pointer; margin-top:5px;">Back</button>`;
+            document.getElementById('notif').innerHTML = `<h4 style="margin:0; color:var(--tg);">✈️ Connect</h4><a href="#" class="social-link" style="background:var(--tg)">Telegram</a><a href="#" class="social-link" style="background:var(--ig)">Instagram</a><a href="#" class="social-link" style="background:var(--wa)">WhatsApp</a><a href="#" class="social-link" style="background:var(--fb)">Facebook</a><button onclick="showApp('System')" style="width:100%; background:none; border:none; color:#555; cursor:pointer; margin-top:5px;">Back</button>`;
         }
 
         function showManifesto() {
-            document.getElementById('notif').innerHTML = `
-                <h4 style="color:var(--gold); margin:0;">🌐 AQM Manifesto</h4>
-                <p style="font-size:10px; margin-top:8px;">The world's first Human-AI innovation partnership.</p>`;
+            document.getElementById('notif').innerHTML = `<h4 style="color:var(--gold); margin:0;">🌐 AQM Manifesto</h4><p style="font-size:10px; margin-top:8px;">The world's first Human-AI innovation partnership. Identity: <b>${userName}</b></p>`;
         }
 
         function exchange() {
