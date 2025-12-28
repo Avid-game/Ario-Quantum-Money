@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AQM Nexus | Quantum Innovation Hub</title>
+    <title>AQM Nexus | Full Integration</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
@@ -22,38 +22,44 @@
         .top-bank { position: absolute; top: 20px; right: 25px; text-align: center; z-index: 50; cursor: pointer; }
         .mini-ario-brain { width: 60px; height: 60px; background: rgba(79, 172, 254, 0.1); border-radius: 50%; border: 2px solid var(--bank); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px var(--bank); }
 
-        /* Core Structure */
-        .container { position: relative; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; }
-        .main-brain { width: 180px; height: 180px; border-radius: 50%; background: url('logo.jpg') center/cover; box-shadow: 0 0 60px var(--glow); z-index: 10; border: 2px solid var(--glow); cursor: pointer; transition: 0.5s; }
-        
-        .node { position: absolute; width: 85px; height: 85px; border-radius: 50%; background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: 0.4s; z-index: 20; }
-        .node:hover { transform: scale(1.15); box-shadow: 0 0 25px currentColor; background: rgba(255,255,255,0.1); }
-        .node span { font-size: 10px; margin-top: 5px; font-weight: bold; text-transform: uppercase; }
+        /* Main Brain Pulse Effect */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 20px var(--glow); transform: scale(1); }
+            50% { box-shadow: 0 0 50px var(--glow), 0 0 20px var(--bank); transform: scale(1.05); }
+            100% { box-shadow: 0 0 20px var(--glow); transform: scale(1); }
+        }
 
-        /* Node Placement */
-        .n-video { top: 10%; left: 50%; transform: translateX(-50%); color: var(--yt); }
-        .n-roadmap { top: 32%; right: 12%; color: var(--ig); }
-        .n-nexus { top: 32%; left: 12%; color: var(--nexus); }
-        .n-games { bottom: 32%; right: 12%; color: var(--glow); }
-        .n-iq { bottom: 32%; left: 12%; color: var(--gold); }
-        .n-social { bottom: 10%; left: 50%; transform: translateX(-50%); color: var(--tg); }
+        .container { position: relative; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .main-brain { width: 160px; height: 160px; border-radius: 50%; background: url('logo.jpg') center/cover; z-index: 10; border: 3px solid var(--glow); cursor: pointer; animation: pulse 3s infinite ease-in-out; }
+        
+        .node { position: absolute; width: 75px; height: 75px; border-radius: 50%; background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; transition: 0.4s; z-index: 20; }
+        .node:hover { transform: scale(1.2); box-shadow: 0 0 25px currentColor; background: rgba(255,255,255,0.1); }
+        .node span { font-size: 9px; margin-top: 5px; font-weight: bold; text-transform: uppercase; }
+
+        /* Perfected Symmetrical Placement */
+        .n-video   { top: 8%; left: 50%; transform: translateX(-50%); color: var(--yt); }
+        .n-roadmap { top: 25%; right: 15%; color: var(--ig); }
+        .n-music   { top: 25%; left: 15%; color: var(--music); }
+        .n-nexus   { top: 50%; right: 5%; transform: translateY(-50%); color: var(--nexus); }
+        .n-games   { bottom: 25%; right: 15%; color: var(--glow); }
+        .n-iq      { bottom: 25%; left: 15%; color: var(--gold); }
+        .n-social  { bottom: 8%; left: 50%; transform: translateX(-50%); color: var(--tg); }
 
         /* UI Panels */
-        .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 380px; background: rgba(0, 0, 0, 0.98); backdrop-filter: blur(30px); border-radius: 20px; border: 1px solid var(--glow); padding: 25px; z-index: 100; box-shadow: 0 0 50px rgba(0,0,0,1); }
-        .quest-box { position: absolute; bottom: 25px; left: 25px; background: rgba(0,0,0,0.85); padding: 18px; border-radius: 15px; border-left: 5px solid var(--glow); width: 320px; z-index: 30; }
-        .btn-prime { background: var(--bank); border: none; color: white; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; transition: 0.3s; }
-        .btn-prime:hover { filter: brightness(1.2); }
+        .modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 350px; background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(25px); border-radius: 20px; border: 1px solid var(--glow); padding: 25px; z-index: 100; }
+        .quest-box { position: absolute; bottom: 25px; left: 25px; background: rgba(0,0,0,0.85); padding: 18px; border-radius: 15px; border-left: 5px solid var(--glow); width: 300px; z-index: 30; }
+        .btn-prime { background: var(--bank); border: none; color: white; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; margin-top: 10px; }
         
-        .asset-row { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; margin-bottom: 10px; }
-        .coin-icon { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; }
+        .asset-row { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; margin-bottom: 8px; }
+        .coin-icon { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div class="top-left-tools">
-        <div class="tool-icon" title="Leaderboard" onclick="playClick(); showLeaderboard()">🏆</div>
-        <div class="tool-icon" title="Logout/Reset" onclick="playClick(); logout()">🔒</div>
-        <div class="tool-icon" title="Copy Link" onclick="playClick(); copyLink()">🔗</div>
+        <div class="tool-icon" onclick="playClick(); showLeaderboard()">🏆</div>
+        <div class="tool-icon" onclick="playClick(); logout()">🔒</div>
+        <div class="tool-icon" onclick="playClick(); copyLink()">🔗</div>
     </div>
 
     <div class="top-bank" onclick="playClick(); openVault()">
@@ -65,6 +71,7 @@
         <div class="main-brain" onclick="playClick(); showApp('Nexus')"></div>
         <div class="node n-video" onclick="playClick(); openModal('videoModal')">🎬<span>Videos</span></div>
         <div class="node n-roadmap" onclick="playClick(); showApp('Roadmap')">🗺️<span>Roadmap</span></div>
+        <div class="node n-music" onclick="playClick(); showApp('Radio')">🎵<span>Music</span></div>
         <div class="node n-nexus" onclick="playClick(); showApp('Nexus')">🔮<span>Nexus</span></div>
         <div class="node n-games" onclick="playClick(); startMiniGame()">🎮<span>Games</span></div>
         <div class="node n-iq" onclick="playClick(); startIQTest()">🧠<span>IQ Test</span></div>
@@ -72,34 +79,34 @@
     </div>
 
     <div class="quest-box" id="notif">
-        <h4 style="margin:0; color:var(--glow);">Initializing Nexus...</h4>
-        <p style="font-size: 12px; margin-top:8px;">Awaiting pioneer identity.</p>
+        <h4 style="margin:0; color:var(--glow);">System Online</h4>
+        <p style="font-size: 11px; margin-top:5px;">Welcome to AQM Nexus.</p>
     </div>
 
     <div id="videoModal" class="modal">
-        <h4 style="color:var(--yt); margin:0 0 15px 0;">🎬 Quantum Cinema</h4>
-        <iframe width="100%" height="210" src="https://www.youtube.com/embed/jfKfPfyJRdk" frameborder="0" allowfullscreen style="border-radius:12px;"></iframe>
+        <h4 style="color:var(--yt); margin:0 0 10px 0;">🎬 Quantum Cinema</h4>
+        <iframe width="100%" height="200" src="https://www.youtube.com/embed/jfKfPfyJRdk" frameborder="0" allowfullscreen style="border-radius:12px;"></iframe>
         <button onclick="closeModal('videoModal')" class="btn-prime" style="background:#222;">Close</button>
     </div>
 
     <div id="walletModal" class="modal">
-        <h3 style="color: var(--bank); text-align: center; margin-top: 0;">🏦 Quantum Assets</h3>
+        <h3 style="color: var(--bank); text-align: center; margin-top:0;">🏦 Assets Vault</h3>
         <div class="asset-row">
             <div style="display:flex; align-items:center; gap:10px;">
-                <div class="coin-icon" style="background:var(--gold); color:black; border:2px solid #fff;">A</div>
+                <div class="coin-icon" style="background:var(--gold); color:black;">A</div>
                 <span>Ario Coin</span>
             </div>
             <b id="gold-bal" style="color:var(--gold);">0</b>
         </div>
         <div class="asset-row">
             <div style="display:flex; align-items:center; gap:10px;">
-                <div class="coin-icon" style="background:var(--bank); border:1px solid #fff;">M</div>
+                <div class="coin-icon" style="background:var(--bank);">M</div>
                 <span>Mini-Ario</span>
             </div>
             <b id="mini-bal" style="color:var(--bank);">0</b>
         </div>
         <button onclick="exchange()" class="btn-prime">Convert 100M -> 1A</button>
-        <button onclick="closeModal('walletModal')" class="btn-prime" style="background:transparent; border:1px solid #444; margin-top:10px;">Close Vault</button>
+        <button onclick="closeModal('walletModal')" class="btn-prime" style="background:transparent; border:1px solid #444;">Close</button>
     </div>
 
     <script>
@@ -128,8 +135,8 @@
         };
 
         function initProfile() {
-            const name = prompt("Choose Pioneer Username:");
-            const pin = prompt("Set 4-digit Secure PIN:");
+            const name = prompt("Enter Name:");
+            const pin = prompt("Set 4-digit PIN:");
             if (name && pin) {
                 userName = name; userPin = pin;
                 localStorage.setItem('aqm_user', name);
@@ -139,58 +146,53 @@
         }
 
         function openVault() {
-            if (prompt("Enter Security PIN:") === userPin) openModal('walletModal');
-            else alert("Access Denied: Invalid PIN");
+            if (prompt("Enter PIN:") === userPin) openModal('walletModal');
+            else alert("Access Denied");
         }
 
         function showApp(n) {
             const nt = document.getElementById('notif');
             if(n === 'Nexus') {
                 nt.style.borderLeft = "5px solid var(--nexus)";
-                nt.innerHTML = `
-                    <h4 style="color:var(--nexus); margin:0;">🔮 AQM Nexus</h4>
-                    <div style="font-size:10px; margin-top:10px; max-height:120px; overflow-y:auto;">
-                        <b style="color:var(--glow);">WELCOME:</b> Hello ${userName}, you are now connected to the quantum hub.<br><br>
-                        <b style="color:var(--gold);">NEWS:</b> Ario Coin mining is active through games.<br><br>
-                        <b style="color:var(--bank);">GUIDE:</b> Solve math and IQ nodes to earn Mini-Ario. Use the Vault to mint Ario Coins.
-                    </div>
-                    <button onclick="showManifesto()" class="btn-prime" style="font-size:10px; padding:5px; margin-top:8px;">View Manifesto</button>
-                `;
+                nt.innerHTML = `<h4 style="color:var(--nexus); margin:0;">🔮 Nexus Hub</h4><p style="font-size:10px; margin-top:5px;"><b>Pioneer:</b> ${userName}<br><b>News:</b> Mining active.<br><b>Status:</b> All nodes secure.</p><button onclick="showManifesto()" class="btn-prime" style="font-size:9px; padding:3px;">Manifesto</button>`;
             } else if(n === 'Roadmap') {
                 nt.style.borderLeft = "5px solid var(--ig)";
-                nt.innerHTML = `<h4 style="color:var(--ig); margin:0;">🗺️ Roadmap</h4><p style="font-size:10px;">Q1: Genesis Dashboard (Live)<br>Q2: AI Voice Core<br>Q3: 3D Metaverse Alpha</p><button onclick="showApp('Nexus')" style="background:none; border:none; color:gray; cursor:pointer; width:100%; margin-top:5px;">Back</button>`;
+                nt.innerHTML = `<h4 style="color:var(--ig); margin:0;">🗺️ Roadmap</h4><p style="font-size:10px;">Phase 1: Genesis Dashboard<br>Phase 2: AI Voice<br>Phase 3: Metaverse</p><button onclick="showApp('Nexus')" style="background:none; border:none; color:gray; cursor:pointer; width:100%;">Back</button>`;
+            } else if(n === 'Radio') {
+                nt.style.borderLeft = "5px solid var(--music)";
+                nt.innerHTML = `<h4 style="color:var(--music); margin:0;">🎵 Music Node</h4><p style="font-size:11px;">Streaming Lo-Fi Quantum Beats...</p><button onclick="showApp('Nexus')" style="background:none; border:none; color:gray; cursor:pointer; width:100%;">Stop</button>`;
             }
         }
 
         function startMiniGame() {
             document.getElementById('notif').innerHTML = `<h4 style="color:var(--glow); margin:0;">🎮 Math Node</h4><p style="font-size:12px; margin:10px 0;">12 + 8 / 2 = ?</p><button onclick="checkGame(16)" class="btn-prime" style="width:45%; margin:2%;">16</button><button onclick="checkGame(10)" class="btn-prime" style="width:45%; margin:2%;">10</button>`;
         }
-        async function checkGame(ans) { if(ans===16) { mini+=10; updateBalances(); await saveScore(10); alert("Success! +10 Mini-Ario"); } showApp('Nexus'); }
+        async function checkGame(ans) { if(ans===16) { mini+=10; updateBalances(); await saveScore(10); alert("Correct!"); } showApp('Nexus'); }
 
         function startIQTest() {
             document.getElementById('notif').innerHTML = `<h4 style="color:var(--gold); margin:0;">🧠 IQ Node</h4><p style="font-size:11px; margin:10px 0;">2+2=魚, then 3+3=?</p><button onclick="checkIQ('8-bit')" class="btn-prime" style="width:45%; margin:2%;">∞</button><button onclick="checkIQ(8)" class="btn-prime" style="width:45%; margin:2%;">8</button>`;
         }
-        async function checkIQ(v) { if(v==='8-bit') { mini+=50; updateBalances(); await saveScore(50); alert("Genius Level! +50 Mini-Ario"); } showApp('Nexus'); }
+        async function checkIQ(v) { if(v==='8-bit') { mini+=50; updateBalances(); await saveScore(50); alert("Genius!"); } showApp('Nexus'); }
 
         async function showLeaderboard() {
-            const nt = document.getElementById('notif'); nt.innerHTML = `<h4>Syncing Data...</h4>`;
+            const nt = document.getElementById('notif'); nt.innerHTML = `<h4>Syncing...</h4>`;
             const { data } = await _supabase.from('user_scores').select('username, score').order('score', { ascending: false }).limit(5);
-            let html = `<h4 style="color:var(--gold);">🏆 Global Pioneers</h4>`;
-            if(data) data.forEach((u, i) => { html += `<div style="display:flex; justify-content:space-between; font-size:11px; padding:3px 0; border-bottom:1px solid #222;"><span>${i+1}. ${u.username}</span><b>${u.score}</b></div>`; });
-            html += `<button onclick="showApp('Nexus')" style="background:none; border:none; color:gray; cursor:pointer; width:100%; margin-top:5px;">Back</button>`;
+            let html = `<h4 style="color:var(--gold);">🏆 Top Pioneers</h4>`;
+            if(data) data.forEach((u, i) => { html += `<div style="display:flex; justify-content:space-between; font-size:10px; padding:3px 0; border-bottom:1px solid #222;"><span>${i+1}. ${u.username}</span><b>${u.score}</b></div>`; });
+            html += `<button onclick="showApp('Nexus')" style="background:none; border:none; color:gray; cursor:pointer; width:100%;">Back</button>`;
             nt.innerHTML = html;
         }
 
         function openConnect() {
-            document.getElementById('notif').innerHTML = `<h4 style="color:var(--tg); margin:0;">✈️ Connect</h4><a href="#" class="social-link" style="background:var(--tg)">Telegram</a><a href="#" class="social-link" style="background:var(--ig)">Instagram</a><button onclick="showApp('Nexus')" style="background:none; border:none; color:gray; cursor:pointer; width:100%; margin-top:5px;">Back</button>`;
+            document.getElementById('notif').innerHTML = `<h4 style="color:var(--tg); margin:0;">✈️ Connect</h4><a href="#" style="color:var(--tg); display:block; margin:5px 0;">Telegram</a><a href="#" style="color:var(--ig); display:block; margin:5px 0;">Instagram</a><button onclick="showApp('Nexus')" style="background:none; border:none; color:gray; cursor:pointer; width:100%;">Back</button>`;
         }
-        function showManifesto() { document.getElementById('notif').innerHTML = `<h4 style="color:var(--gold); margin:0;">🌐 Manifesto</h4><p style="font-size:10px; margin-top:8px;">The world's first Human-AI innovation partnership. Dedicated to the advancement of collective intelligence.</p><button onclick="showApp('Nexus')" style="background:none; border:none; color:gray; cursor:pointer; width:100%;">Close</button>`; }
-        function logout() { if(confirm("Secure Reset?")) { localStorage.clear(); location.reload(); } }
+        function showManifesto() { document.getElementById('notif').innerHTML = `<h4 style="color:var(--gold); margin:0;">🌐 Manifesto</h4><p style="font-size:9px;">AQM: Human-AI Future Evolution.</p><button onclick="showApp('Nexus')" style="background:none; border:none; color:gray; cursor:pointer; width:100%;">Close</button>`; }
+        function logout() { if(confirm("Reset Account?")) { localStorage.clear(); location.reload(); } }
         function openModal(id) { document.getElementById(id).style.display = 'block'; }
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
         function updateBalances() { document.getElementById('gold-bal').innerText = ario; document.getElementById('mini-bal').innerText = mini; }
         async function saveScore(p) { await _supabase.from('user_scores').insert([{ username: userName || "Guest", score: p }]); }
-        function copyLink() { navigator.clipboard.writeText(window.location.href); alert("Referral Link Copied!"); }
+        function copyLink() { navigator.clipboard.writeText(window.location.href); alert("Copied!"); }
     </script>
 </body>
 </html>
