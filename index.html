@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AQM Nexus | Quantum Station</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <title>AQM Nexus | Quantum Interface</title>
     <style>
         :root {
             --glow: #00f2fe; --bank: #4facfe; --gold: #fcc419;
@@ -19,54 +18,56 @@
 
         /* هسته مرکزی کوانتومی */
         .main-brain { 
-            width: 190px; height: 190px; border-radius: 50%; 
+            width: 195px; height: 195px; border-radius: 50%; 
             background: url('brain.gif.gif') center/cover no-repeat; 
             z-index: 10; border: 3px solid var(--glow); cursor: pointer; 
             box-shadow: 0 0 50px var(--glow);
-            transition: 0.5s;
+            transition: 0.5s; overflow: hidden;
         }
+        .main-brain:hover { transform: scale(1.05); box-shadow: 0 0 80px var(--glow); }
         
-        /* استایل نودهای تصویری جدید */
+        /* استایل نودهای تصویری هوشمند */
         .node { 
-            position: absolute; width: 95px; height: 95px; border-radius: 50%; 
+            position: absolute; width: 100px; height: 100px; border-radius: 50%; 
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
             cursor: pointer; transition: 0.4s; z-index: 20;
-            background: rgba(0,0,0,0.3); backdrop-filter: blur(5px);
+            background: rgba(0,0,0,0.2); backdrop-filter: blur(8px);
             border: 1px solid rgba(255,255,255,0.1);
         }
         .node img { 
-            width: 70%; height: 70%; object-fit: contain; 
-            mix-blend-mode: screen; /* حذف خودکار پس‌زمینه مشکی آیکون‌ها */
+            width: 80%; height: 80%; object-fit: contain; 
+            mix-blend-mode: screen; /* حذف هوشمند پس‌زمینه مشکی آیکون‌ها */
+            filter: drop-shadow(0 0 5px currentColor);
         }
-        .node:hover { transform: scale(1.2); box-shadow: 0 0 30px currentColor; }
-        .node span { font-size: 9px; font-weight: bold; text-transform: uppercase; margin-top: 2px; }
+        .node:hover { transform: scale(1.15); background: rgba(255,255,255,0.1); }
+        .node span { font-size: 10px; font-weight: bold; text-transform: uppercase; margin-top: -5px; text-shadow: 0 0 10px black; }
 
         /* چیدمان نودها */
         .n-video   { top: 10%; left: 50%; transform: translateX(-50%); color: var(--yt); }
-        .n-music   { top: 30%; left: 18%; color: var(--music); }
-        .n-roadmap { top: 30%; right: 18%; color: #2ecc71; }
-        .n-nexus   { top: 50%; right: 7%; transform: translateY(-50%); color: var(--nexus); }
-        .n-games   { bottom: 30%; right: 18%; color: var(--glow); }
-        .n-iq      { bottom: 30%; left: 18%; color: var(--gold); }
+        .n-music   { top: 32%; left: 15%; color: var(--music); }
+        .n-roadmap { top: 32%; right: 15%; color: #2ecc71; }
+        .n-nexus   { top: 50%; right: 5%; transform: translateY(-50%); color: var(--nexus); }
+        .n-games   { bottom: 32%; right: 15%; color: var(--glow); }
+        .n-iq      { bottom: 32%; left: 15%; color: var(--gold); }
         .n-social  { bottom: 10%; left: 50%; transform: translateX(-50%); color: #1e90ff; }
 
-        /* UI Panels */
-        .top-bank { position: absolute; top: 25px; right: 25px; text-align: center; z-index: 50; }
-        .mini-ario-brain { width: 65px; height: 65px; background: rgba(0,0,0,0.6); border-radius: 50%; border: 2px solid var(--bank); display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); box-shadow: 0 0 20px var(--bank); }
-        .quest-box { position: absolute; bottom: 30px; left: 30px; background: rgba(0,0,0,0.8); padding: 20px; border-radius: 18px; border-left: 6px solid var(--glow); width: 280px; z-index: 30; }
+        /* UI Elements */
+        .top-bank { position: absolute; top: 30px; right: 30px; text-align: center; z-index: 50; }
+        .mini-ario-brain { width: 70px; height: 70px; background: rgba(0,0,0,0.6); border-radius: 50%; border: 2px solid var(--bank); display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); box-shadow: 0 0 25px var(--bank); cursor: pointer; }
+        .quest-box { position: absolute; bottom: 30px; left: 30px; background: rgba(0,0,0,0.85); padding: 22px; border-radius: 20px; border-left: 6px solid var(--glow); width: 260px; z-index: 30; border: 1px solid rgba(255,255,255,0.05); }
     </style>
 </head>
 <body>
 
-    <div class="top-bank">
+    <div class="top-bank" onclick="showApp('Vault')">
         <div class="mini-ario-brain">💎</div>
-        <p style="font-size: 11px; color: var(--bank); margin: 8px 0; font-weight: bold;">VAULT</p>
+        <p style="font-size: 11px; color: var(--bank); margin: 8px 0; font-weight: bold; letter-spacing: 1px;">VAULT</p>
     </div>
 
     <div class="container">
         <div class="main-brain" onclick="showApp('Nexus')"></div>
         
-        <div class="node n-video" onclick="showApp('Video')">
+        <div class="node n-video" onclick="showApp('Cinema')">
             <img src="video.png.png" alt="Video">
             <span>Videos</span>
         </div>
@@ -84,14 +85,14 @@
     </div>
 
     <div class="quest-box" id="notif">
-        <h4 style="margin:0; color:var(--glow);">CORE SYNCHRONIZED</h4>
-        <p style="font-size: 11px; margin-top:8px;">Custom icons successfully integrated.</p>
+        <h4 style="margin:0; color:var(--glow); letter-spacing: 1px;">STATION ACTIVE</h4>
+        <p style="font-size: 11px; margin-top:10px; opacity: 0.8;">Quantum visuals 100% loaded.</p>
     </div>
 
     <script>
         function showApp(n) {
             const nt = document.getElementById('notif');
-            nt.innerHTML = `<h4 style="color:var(--glow); margin:0;">AQM ${n}</h4><p style="font-size:10px; margin-top:5px;">Quantum Node Active<br>Status: Encrypted</p>`;
+            nt.innerHTML = `<h4 style="color:var(--glow); margin:0;">${n} NODE</h4><p style="font-size:10px; margin-top:8px;">Accessing Ario Quantum Network...<br>Status: Authorized</p>`;
         }
     </script>
 </body>
