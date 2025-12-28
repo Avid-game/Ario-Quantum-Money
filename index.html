@@ -3,46 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AQM Nexus | Quantum Interface</title>
+    <title>AQM Nexus | Pure Interface</title>
     <style>
         :root {
             --glow: #00f2fe; --bank: #4facfe; --gold: #fcc419;
             --yt: #ff4757; --music: #a29bfe; --nexus: #6c5ce7;
         }
         body {
+            /* استفاده از پس‌زمینه کهکشانی اختصاصی شما */
             background: url('bg.jpg.jpg') center/cover no-repeat fixed;
             color: white; font-family: 'Segoe UI', sans-serif; margin: 0; height: 100vh; overflow: hidden;
         }
 
         .container { position: relative; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; z-index: 2; }
 
-        /* هسته مرکزی کوانتومی */
+        /* اصلاح هسته مرکزی - حذف دایره و استفاده از درخشش روی محتوا */
         .main-brain { 
-            width: 195px; height: 195px; border-radius: 50%; 
-            background: url('brain.gif.gif') center/cover no-repeat; 
-            z-index: 10; border: 3px solid var(--glow); cursor: pointer; 
-            box-shadow: 0 0 50px var(--glow);
-            transition: 0.5s; overflow: hidden;
+            width: 200px; height: 200px; 
+            z-index: 10; cursor: pointer; 
+            display: flex; align-items: center; justify-content: center;
+            transition: 0.5s;
         }
-        .main-brain:hover { transform: scale(1.05); box-shadow: 0 0 80px var(--glow); }
+        .main-brain img {
+            width: 100%; height: 100%; object-fit: contain;
+            /* حذف لبه‌های سیاه احتمالی با ادغام در پس‌زمینه */
+            mix-blend-mode: screen; 
+            filter: drop-shadow(0 0 25px var(--glow));
+        }
+        .main-brain:hover { transform: scale(1.1); }
         
-        /* استایل نودهای تصویری هوشمند */
+        /* استایل نودها - کاملاً آزاد و بدون کادر دایره‌ای */
         .node { 
-            position: absolute; width: 100px; height: 100px; border-radius: 50%; 
+            position: absolute; width: 110px; height: 110px; 
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
             cursor: pointer; transition: 0.4s; z-index: 20;
-            background: rgba(0,0,0,0.2); backdrop-filter: blur(8px);
-            border: 1px solid rgba(255,255,255,0.1);
+            background: transparent; border: none;
         }
         .node img { 
-            width: 80%; height: 80%; object-fit: contain; 
-            mix-blend-mode: screen; /* حذف هوشمند پس‌زمینه مشکی آیکون‌ها */
-            filter: drop-shadow(0 0 5px currentColor);
+            width: 85%; height: 85%; object-fit: contain; 
+            mix-blend-mode: screen; /* حذف پس‌زمینه مشکی آیکون‌های کانوا */
+            filter: drop-shadow(0 0 12px currentColor);
         }
-        .node:hover { transform: scale(1.15); background: rgba(255,255,255,0.1); }
-        .node span { font-size: 10px; font-weight: bold; text-transform: uppercase; margin-top: -5px; text-shadow: 0 0 10px black; }
+        .node span { 
+            font-size: 10px; font-weight: bold; text-transform: uppercase; 
+            margin-top: 5px; text-shadow: 0 0 10px black; color: white;
+        }
+        .node:hover { transform: scale(1.2); }
 
-        /* چیدمان نودها */
+        /* چیدمان دقیق نودها */
         .n-video   { top: 10%; left: 50%; transform: translateX(-50%); color: var(--yt); }
         .n-music   { top: 32%; left: 15%; color: var(--music); }
         .n-roadmap { top: 32%; right: 15%; color: #2ecc71; }
@@ -51,21 +59,30 @@
         .n-iq      { bottom: 32%; left: 15%; color: var(--gold); }
         .n-social  { bottom: 10%; left: 50%; transform: translateX(-50%); color: #1e90ff; }
 
-        /* UI Elements */
-        .top-bank { position: absolute; top: 30px; right: 30px; text-align: center; z-index: 50; }
-        .mini-ario-brain { width: 70px; height: 70px; background: rgba(0,0,0,0.6); border-radius: 50%; border: 2px solid var(--bank); display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); box-shadow: 0 0 25px var(--bank); cursor: pointer; }
-        .quest-box { position: absolute; bottom: 30px; left: 30px; background: rgba(0,0,0,0.85); padding: 22px; border-radius: 20px; border-left: 6px solid var(--glow); width: 260px; z-index: 30; border: 1px solid rgba(255,255,255,0.05); }
+        /* ابزارهای رابط کاربری */
+        .top-bank { position: absolute; top: 30px; right: 30px; text-align: center; z-index: 50; cursor: pointer; }
+        .mini-ario-brain { 
+            width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--bank); 
+            display: flex; align-items: center; justify-content: center; 
+            backdrop-filter: blur(10px); box-shadow: 0 0 20px var(--bank); background: rgba(0,0,0,0.4);
+        }
+        .quest-box { 
+            position: absolute; bottom: 30px; left: 30px; background: rgba(0,0,0,0.8); 
+            padding: 20px; border-radius: 15px; border-left: 5px solid var(--glow); width: 250px; z-index: 30; 
+        }
     </style>
 </head>
 <body>
 
     <div class="top-bank" onclick="showApp('Vault')">
         <div class="mini-ario-brain">💎</div>
-        <p style="font-size: 11px; color: var(--bank); margin: 8px 0; font-weight: bold; letter-spacing: 1px;">VAULT</p>
+        <p style="font-size: 10px; color: var(--bank); margin: 8px 0; font-weight: bold;">VAULT</p>
     </div>
 
     <div class="container">
-        <div class="main-brain" onclick="showApp('Nexus')"></div>
+        <div class="main-brain" onclick="showApp('Nexus')">
+            <img src="brain.gif.gif" alt="Quantum Core">
+        </div>
         
         <div class="node n-video" onclick="showApp('Cinema')">
             <img src="video.png.png" alt="Video">
@@ -77,7 +94,7 @@
             <span>Music</span>
         </div>
 
-        <div class="node n-roadmap" onclick="showApp('Roadmap')">📍<span>Roadmap</span></div>
+        <div class="node n-roadmap" onclick="showApp('Roadmap')">🗺️<span>Roadmap</span></div>
         <div class="node n-nexus" onclick="showApp('Nexus')">🔮<span>Nexus</span></div>
         <div class="node n-games" onclick="showApp('Games')">🎮<span>Games</span></div>
         <div class="node n-iq" onclick="showApp('IQ')">🧠<span>IQ Test</span></div>
@@ -85,14 +102,15 @@
     </div>
 
     <div class="quest-box" id="notif">
-        <h4 style="margin:0; color:var(--glow); letter-spacing: 1px;">STATION ACTIVE</h4>
-        <p style="font-size: 11px; margin-top:10px; opacity: 0.8;">Quantum visuals 100% loaded.</p>
+        <h4 style="margin:0; color:var(--glow); letter-spacing: 1px;">SYSTEM READY</h4>
+        <p style="font-size: 10px; margin-top:8px; opacity: 0.7;">Visual clipping resolved. Full-screen quantum mode active.</p>
     </div>
 
     <script>
         function showApp(n) {
-            const nt = document.getElementById('notif');
-            nt.innerHTML = `<h4 style="color:var(--glow); margin:0;">${n} NODE</h4><p style="font-size:10px; margin-top:8px;">Accessing Ario Quantum Network...<br>Status: Authorized</p>`;
+            document.getElementById('notif').innerHTML = `
+                <h4 style="color:var(--glow); margin:0;">${n} NODE</h4>
+                <p style="font-size:10px; margin-top:8px;">Frequency: 432Hz<br>Status: Synchronized</p>`;
         }
     </script>
 </body>
