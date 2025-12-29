@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AQM Nexus | Quantum Interface</title>
+    <title>AQM Nexus | Galactic Core</title>
     <style>
         :root {
             --glow: #00f2fe; --bank: #4facfe; --gold: #fcc419;
@@ -14,97 +14,94 @@
             color: white; font-family: 'Segoe UI', sans-serif; margin: 0; height: 100vh; overflow: hidden;
         }
 
-        .container { 
-            position: relative; width: 100vw; height: 100vh; 
-            display: flex; align-items: center; justify-content: center; 
-        }
-
-        /* اصلاح مغز مرکزی - حذف پس‌زمینه سیاه مربع */
-        .main-brain { 
-            width: 250px; height: 250px; z-index: 10; cursor: pointer; 
+        /* ظرف اصلی برای چیدمان دایره‌ای */
+        .nexus-wrapper {
+            position: relative; width: 100vw; height: 100vh;
             display: flex; align-items: center; justify-content: center;
-            transition: 0.5s;
         }
-        .main-brain img {
+
+        /* هسته مرکزی نئونی */
+        .core {
+            position: relative; width: 220px; height: 220px;
+            z-index: 10; display: flex; align-items: center; justify-content: center;
+        }
+        .core img {
             width: 100%; height: 100%; object-fit: contain;
-            mix-blend-mode: screen; /* این خط سیاهی دور مغز را حذف می‌کند */
+            mix-blend-mode: screen; /* حذف مربع سیاه دور مغز */
             filter: drop-shadow(0 0 30px var(--glow));
+            animation: pulse 3s infinite ease-in-out;
         }
+
+        /* نودها در مدار دایره‌ای */
+        .node {
+            position: absolute; width: 100px; height: 100px;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: 0.4s; z-index: 20; cursor: pointer;
+            background: rgba(255, 255, 255, 0.05); /* افکت شیشه‌ای طرح جدید */
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px; backdrop-filter: blur(5px);
+        }
+        .node img { width: 60%; height: 60%; object-fit: contain; mix-blend-mode: screen; }
+        .node span { font-size: 10px; margin-top: 8px; font-weight: bold; letter-spacing: 1px; }
+        .node:hover { transform: scale(1.15); border-color: var(--glow); box-shadow: 0 0 20px var(--glow); }
+
+        /* تعیین موقعیت نودها بر اساس زوایا (دایره‌ای) */
+        /* فاصله از مرکز: 280 پیکسل */
+        .n1 { transform: translate(0, -280px); color: var(--yt); }      /* Videos */
+        .n2 { transform: translate(240px, -140px); color: #2ecc71; }    /* Roadmap */
+        .n3 { transform: translate(240px, 140px); color: var(--nexus); } /* Nexus */
+        .n4 { transform: translate(0, 280px); color: #1e90ff; }         /* Connect */
+        .n5 { transform: translate(-240px, 140px); color: var(--gold); } /* IQ Test */
+        .n6 { transform: translate(-240px, -140px); color: var(--music); }/* Music */
+
+        /* خطوط اتصال دایره‌ای (اختیاری برای زیبایی بیشتر) */
+        .orbit {
+            position: absolute; width: 560px; height: 560px;
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            border-radius: 50%; pointer-events: none;
+        }
+
+        /* UI Elements */
+        .vault-btn { position: absolute; top: 30px; right: 30px; text-align: center; }
+        .v-icon { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--bank); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px var(--bank); background: rgba(0,0,0,0.4); font-size: 24px; }
         
-        /* استایل نودها - بدون کادر دایره‌ای */
-        .node { 
-            position: absolute; width: 120px; height: 120px; 
-            display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            cursor: pointer; transition: 0.4s; z-index: 20;
-            background: transparent !important; border: none !important;
-        }
-        .node img { 
-            width: 90%; height: 90%; object-fit: contain; 
-            mix-blend-mode: screen; /* حذف سیاهی دور آیکون‌های جدید */
-            filter: drop-shadow(0 0 15px currentColor);
-        }
-        .node span { 
-            font-size: 11px; font-weight: bold; text-transform: uppercase; 
-            margin-top: 5px; text-shadow: 0 0 8px black;
-        }
-
-        /* موقعیت‌دهی دقیق بر اساس تصویر شما */
-        .n-video   { top: 5%; left: 50%; transform: translateX(-50%); color: var(--yt); }
-        .n-music   { top: 35%; left: 15%; color: var(--music); }
-        .n-roadmap { top: 35%; right: 15%; color: #2ecc71; }
-        .n-nexus   { top: 55%; right: 10%; color: var(--nexus); }
-        .n-games   { bottom: 15%; right: 35%; color: var(--glow); }
-        .n-iq      { bottom: 15%; left: 15%; color: var(--gold); }
-        .n-social  { bottom: 5%; left: 50%; transform: translateX(-50%); color: #1e90ff; }
-
-        /* UI */
-        .top-bank { position: absolute; top: 30px; right: 30px; text-align: center; z-index: 50; }
-        .mini-ario-brain { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--bank); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px var(--bank); background: rgba(0,0,0,0.5); }
-        .quest-box { position: absolute; bottom: 30px; left: 30px; background: rgba(0,0,0,0.8); padding: 20px; border-radius: 15px; border-left: 5px solid var(--glow); width: 240px; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.05); opacity: 1; } }
     </style>
 </head>
 <body>
 
-    <div class="top-bank">
-        <div class="mini-ario-brain">💎</div>
-        <p style="font-size: 10px; color: var(--bank); margin-top: 5px; font-weight: bold;">VAULT</p>
-    </div>
-
-    <div class="container">
-        <div class="main-brain" onclick="showApp('Nexus')">
-            <img src="brain.gif.gif" alt="Core">
-        </div>
-        
-        <div class="node n-video" onclick="showApp('Cinema')">
-            <img src="video.png.png" alt="Video">
-            <span>Videos</span>
+    <div class="nexus-wrapper">
+        <div class="orbit"></div> <div class="vault-btn">
+            <div class="v-icon">💎</div>
+            <p style="font-size: 10px; color: var(--bank); margin-top: 5px; font-weight: bold;">VAULT</p>
         </div>
 
-        <div class="node n-music" onclick="showApp('Radio')">
-            <img src="music.png.png" alt="Music">
-            <span>Music</span>
+        <div class="core">
+            <img src="brain.gif.gif" alt="Quantum Brain">
         </div>
 
-        <div class="node n-roadmap" onclick="showApp('Roadmap')">
-            <img src="241fcb00-bdca-42ae-b2c2-182bf5fae655.jpg" alt="Roadmap">
-            <span>Roadmap</span>
+        <div class="node n1" onclick="show('Videos')">
+            <img src="video.png.png" alt="V">
+            <span>VIDEOS</span>
         </div>
 
-        <div class="node n-nexus" onclick="showApp('Nexus')">🔮<span>Nexus</span></div>
-        <div class="node n-games" onclick="showApp('Games')">🎮<span>Games</span></div>
-        <div class="node n-iq" onclick="showApp('IQ')">🧠<span>IQ Test</span></div>
-        <div class="node n-social" onclick="showApp('Social')">✈️<span>Connect</span></div>
-    </div>
+        <div class="node n2" onclick="show('Roadmap')">
+            <img src="241fcb00-bdca-42ae-b2c2-182bf5fae655.jpg" alt="R">
+            <span>ROADMAP</span>
+        </div>
 
-    <div class="quest-box" id="notif">
-        <h4 style="margin:0; color:var(--glow);">CORE STATUS: ONLINE</h4>
-        <p style="font-size: 10px; margin-top:8px;">All quantum nodes integrated successfully.</p>
+        <div class="node n3" onclick="show('Nexus')">🔮<span>NEXUS</span></div>
+        <div class="node n4" onclick="show('Connect')">✈️<span>CONNECT</span></div>
+        <div class="node n5" onclick="show('IQ Test')">🧠<span>IQ TEST</span></div>
+
+        <div class="node n6" onclick="show('Music')">
+            <img src="music.png.png" alt="M">
+            <span>MUSIC</span>
+        </div>
     </div>
 
     <script>
-        function showApp(n) {
-            document.getElementById('notif').innerHTML = `<h4 style="color:var(--glow); margin:0;">${n}</h4><p style="font-size:10px; margin-top:5px;">Accessing encrypted data...</p>`;
-        }
+        function show(name) { alert(name + " Node Activated"); }
     </script>
 </body>
 </html>
