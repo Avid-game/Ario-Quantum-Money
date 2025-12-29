@@ -3,36 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AQM Nexus | Pure Interface</title>
-<style>
-    /* اصلاح نهایی نودها: حذف کادر دایره‌ای و اجازه به نمایش کامل آیکون مربعی */
-    .node { 
-        position: absolute; width: 110px; height: 110px; 
-        display: flex; flex-direction: column; align-items: center; justify-content: center; 
-        cursor: pointer; transition: 0.4s; z-index: 20;
-        background: transparent !important; /* حذف رنگ پس‌زمینه دایره‌ای */
-        border: none !important; /* حذف خط دور دایره */
-        backdrop-filter: none !important; /* حذف افکت تاری دایره‌ای */
-    }
+    <title>AQM Nexus | Quantum Station</title>
+    <style>
+        :root {
+            --glow: #00f2fe; --bank: #4facfe; --gold: #fcc419;
+            --yt: #ff4757; --music: #a29bfe; --nexus: #6c5ce7;
+        }
+        body {
+            background: url('bg.jpg.jpg') center/cover no-repeat fixed;
+            color: white; font-family: 'Segoe UI', sans-serif; margin: 0; height: 100vh; overflow: hidden;
+        }
 
-    .node img { 
-        width: 100%; height: 100%; object-fit: contain; 
-        mix-blend-mode: screen; /* حذف پس‌زمینه مشکی آیکون‌ها */
-        filter: drop-shadow(0 0 15px currentColor);
-    }
+        /* ظرف اصلی برای نگه داشتن همه‌چیز در مرکز */
+        .container { 
+            position: relative; width: 100vw; height: 100vh; 
+            display: flex; align-items: center; justify-content: center; z-index: 2; 
+        }
 
-    /* اصلاح مغز مرکزی: حذف کادر برای جلوگیری از بریدگی Gif */
-    .main-brain { 
-        width: 200px; height: 200px; border-radius: 0; /* حذف دایره */
-        background: transparent !important; border: none !important;
-        display: flex; align-items: center; justify-content: center;
-    }
-    .main-brain img {
-        width: 100%; height: 100%; object-fit: contain;
-        mix-blend-mode: screen;
-        filter: drop-shadow(0 0 30px var(--glow));
-    }
-</style>
+        /* اصلاح مغز مرکزی - حذف کادر دایره‌ای برای جلوگیری از بریدگی */
+        .main-brain { 
+            width: 220px; height: 220px; z-index: 10; cursor: pointer; 
+            display: flex; align-items: center; justify-content: center;
+            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .main-brain img {
+            width: 100%; height: 100%; object-fit: contain;
+            mix-blend-mode: screen; /* حذف لبه‌های مشکی GIF */
+            filter: drop-shadow(0 0 30px var(--glow));
+        }
+        .main-brain:hover { transform: scale(1.1); }
+        
+        /* استایل نودها - بدون کادر دایره‌ای مزاحم */
+        .node { 
+            position: absolute; width: 115px; height: 115px; 
+            display: flex; flex-direction: column; align-items: center; justify-content: center; 
+            cursor: pointer; transition: 0.4s; z-index: 20;
+            background: transparent !important; border: none !important;
+        }
+        .node img { 
+            width: 85%; height: 85%; object-fit: contain; 
+            mix-blend-mode: screen; /* حذف پس‌زمینه مشکی آیکون‌های جدید */
+            filter: drop-shadow(0 0 15px currentColor);
+        }
+        .node span { 
+            font-size: 10px; font-weight: bold; text-transform: uppercase; 
+            margin-top: 5px; text-shadow: 0 0 10px black; color: white;
+        }
+        .node:hover { transform: scale(1.2); filter: brightness(1.2); }
+
+        /* موقعیت‌دهی دقیق نودها دور هسته مرکزی */
+        .n-video   { top: 10%; left: 50%; transform: translateX(-50%); color: var(--yt); }
+        .n-music   { top: 32%; left: 15%; color: var(--music); }
+        .n-roadmap { top: 32%; right: 15%; color: #2ecc71; }
+        .n-nexus   { top: 50%; right: 5%; transform: translateY(-50%); color: var(--nexus); }
+        .n-games   { bottom: 32%; right: 15%; color: var(--glow); }
+        .n-iq      { bottom: 32%; left: 15%; color: var(--gold); }
+        .n-social  { bottom: 10%; left: 50%; transform: translateX(-50%); color: #1e90ff; }
+
+        /* پنل‌های رابط کاربری جانبی */
+        .top-bank { position: absolute; top: 30px; right: 30px; text-align: center; z-index: 50; cursor: pointer; }
+        .mini-ario-brain { 
+            width: 65px; height: 65px; border-radius: 50%; border: 2px solid var(--bank); 
+            display: flex; align-items: center; justify-content: center; 
+            backdrop-filter: blur(10px); box-shadow: 0 0 20px var(--bank); background: rgba(0,0,0,0.4);
+        }
+        .quest-box { 
+            position: absolute; bottom: 30px; left: 30px; background: rgba(0,0,0,0.8); 
+            padding: 20px; border-radius: 15px; border-left: 5px solid var(--glow); width: 250px; z-index: 30; 
+        }
+    </style>
 </head>
 <body>
 
@@ -56,7 +95,11 @@
             <span>Music</span>
         </div>
 
-        <div class="node n-roadmap" onclick="showApp('Roadmap')">🗺️<span>Roadmap</span></div>
+        <div class="node n-roadmap" onclick="showApp('Roadmap')">
+            <img src="roadmap.png.png" alt="Roadmap">
+            <span>Roadmap</span>
+        </div>
+
         <div class="node n-nexus" onclick="showApp('Nexus')">🔮<span>Nexus</span></div>
         <div class="node n-games" onclick="showApp('Games')">🎮<span>Games</span></div>
         <div class="node n-iq" onclick="showApp('IQ')">🧠<span>IQ Test</span></div>
@@ -65,14 +108,14 @@
 
     <div class="quest-box" id="notif">
         <h4 style="margin:0; color:var(--glow); letter-spacing: 1px;">SYSTEM READY</h4>
-        <p style="font-size: 10px; margin-top:8px; opacity: 0.7;">Visual clipping resolved. Full-screen quantum mode active.</p>
+        <p style="font-size: 10px; margin-top:8px; opacity: 0.7;">Clipping resolved. All nodes synchronized.</p>
     </div>
 
     <script>
         function showApp(n) {
             document.getElementById('notif').innerHTML = `
                 <h4 style="color:var(--glow); margin:0;">${n} NODE</h4>
-                <p style="font-size:10px; margin-top:8px;">Frequency: 432Hz<br>Status: Synchronized</p>`;
+                <p style="font-size:10px; margin-top:8px;">Frequency: 432Hz<br>Status: Active</p>`;
         }
     </script>
 </body>
