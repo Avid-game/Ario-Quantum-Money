@@ -3,105 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AQM Nexus | Galactic Core</title>
+    <title>AQM Nexus | Galactic Interface</title>
     <style>
         :root {
-            --glow: #00f2fe; --bank: #4facfe; --gold: #fcc419;
-            --yt: #ff4757; --music: #a29bfe; --nexus: #6c5ce7;
+            --glow: #00f2fe; --bank: #4facfe; --yt: #ff4757; 
+            --music: #a29bfe; --nexus: #6c5ce7;
         }
         body {
             background: url('bg.jpg.jpg') center/cover no-repeat fixed;
             color: white; font-family: 'Segoe UI', sans-serif; margin: 0; height: 100vh; overflow: hidden;
-        }
-
-        /* ظرف اصلی برای چیدمان دایره‌ای */
-        .nexus-wrapper {
-            position: relative; width: 100vw; height: 100vh;
             display: flex; align-items: center; justify-content: center;
         }
 
-        /* هسته مرکزی نئونی */
-        .core {
-            position: relative; width: 220px; height: 220px;
-            z-index: 10; display: flex; align-items: center; justify-content: center;
-        }
-        .core img {
-            width: 100%; height: 100%; object-fit: contain;
-            mix-blend-mode: screen; /* حذف مربع سیاه دور مغز */
-            filter: drop-shadow(0 0 30px var(--glow));
-            animation: pulse 3s infinite ease-in-out;
+        /* مدار مرکزی */
+        .nexus-container {
+            position: relative; width: 600px; height: 600px;
+            display: flex; align-items: center; justify-content: center;
         }
 
-        /* نودها در مدار دایره‌ای */
+        /* هسته مرکزی - بدون کادر سیاه */
+        .main-core {
+            position: absolute; width: 220px; height: 220px; z-index: 10;
+        }
+        .main-core img {
+            width: 100%; height: 100%; object-fit: contain;
+            mix-blend-mode: screen; /* حذف سیاهی دور مغز */
+            filter: drop-shadow(0 0 30px var(--glow));
+        }
+
+        /* نودهای دایره‌ای شبیه طرح انتخابی شما */
         .node {
             position: absolute; width: 100px; height: 100px;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px; backdrop-filter: blur(8px);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: 0.4s; z-index: 20; cursor: pointer;
-            background: rgba(255, 255, 255, 0.05); /* افکت شیشه‌ای طرح جدید */
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px; backdrop-filter: blur(5px);
+            cursor: pointer; transition: 0.4s ease; z-index: 20;
         }
         .node img { width: 60%; height: 60%; object-fit: contain; mix-blend-mode: screen; }
-        .node span { font-size: 10px; margin-top: 8px; font-weight: bold; letter-spacing: 1px; }
-        .node:hover { transform: scale(1.15); border-color: var(--glow); box-shadow: 0 0 20px var(--glow); }
+        .node span { font-size: 10px; margin-top: 5px; font-weight: bold; letter-spacing: 1px; }
+        .node:hover { transform: scale(1.1); border-color: var(--glow); box-shadow: 0 0 20px var(--glow); }
 
-        /* تعیین موقعیت نودها بر اساس زوایا (دایره‌ای) */
-        /* فاصله از مرکز: 280 پیکسل */
-        .n1 { transform: translate(0, -280px); color: var(--yt); }      /* Videos */
-        .n2 { transform: translate(240px, -140px); color: #2ecc71; }    /* Roadmap */
-        .n3 { transform: translate(240px, 140px); color: var(--nexus); } /* Nexus */
-        .n4 { transform: translate(0, 280px); color: #1e90ff; }         /* Connect */
-        .n5 { transform: translate(-240px, 140px); color: var(--gold); } /* IQ Test */
-        .n6 { transform: translate(-240px, -140px); color: var(--music); }/* Music */
+        /* تعیین زوایای دقیق نودها دور دایره */
+        .n-video   { transform: translate(0, -260px); color: var(--yt); }
+        .n-roadmap { transform: translate(225px, -130px); color: #2ecc71; }
+        .n-nexus   { transform: translate(225px, 130px); color: var(--nexus); }
+        .n-connect { transform: translate(0, 260px); color: #1e90ff; }
+        .n-iq      { transform: translate(-225px, 130px); color: #fcc419; }
+        .n-music   { transform: translate(-225px, -130px); color: var(--music); }
 
-        /* خطوط اتصال دایره‌ای (اختیاری برای زیبایی بیشتر) */
-        .orbit {
-            position: absolute; width: 560px; height: 560px;
-            border: 1px dashed rgba(255, 255, 255, 0.1);
-            border-radius: 50%; pointer-events: none;
-        }
-
-        /* UI Elements */
-        .vault-btn { position: absolute; top: 30px; right: 30px; text-align: center; }
-        .v-icon { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--bank); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px var(--bank); background: rgba(0,0,0,0.4); font-size: 24px; }
+        /* بخش‌های جانبی UI */
+        .vault-link { position: absolute; top: 40px; right: 40px; text-align: center; }
+        .v-box { width: 55px; height: 55px; border-radius: 50%; border: 2px solid var(--bank); display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.5); box-shadow: 0 0 15px var(--bank); }
         
-        @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.05); opacity: 1; } }
+        .system-log { position: absolute; bottom: 40px; left: 40px; background: rgba(0,0,0,0.7); padding: 15px; border-radius: 12px; border-left: 4px solid var(--glow); width: 220px; font-size: 11px; }
     </style>
 </head>
 <body>
 
-    <div class="nexus-wrapper">
-        <div class="orbit"></div> <div class="vault-btn">
-            <div class="v-icon">💎</div>
-            <p style="font-size: 10px; color: var(--bank); margin-top: 5px; font-weight: bold;">VAULT</p>
+    <div class="vault-link">
+        <div class="v-box">💎</div>
+        <p style="font-size: 10px; color: var(--bank); margin-top: 8px; font-weight: bold;">VAULT</p>
+    </div>
+
+    <div class="nexus-container">
+        <div class="main-core">
+            <img src="brain.gif.gif" alt="Core">
         </div>
 
-        <div class="core">
-            <img src="brain.gif.gif" alt="Quantum Brain">
-        </div>
-
-        <div class="node n1" onclick="show('Videos')">
+        <div class="node n-video" onclick="show('Videos')">
             <img src="video.png.png" alt="V">
             <span>VIDEOS</span>
         </div>
 
-        <div class="node n2" onclick="show('Roadmap')">
+        <div class="node n-roadmap" onclick="show('Roadmap')">
             <img src="241fcb00-bdca-42ae-b2c2-182bf5fae655.jpg" alt="R">
             <span>ROADMAP</span>
         </div>
 
-        <div class="node n3" onclick="show('Nexus')">🔮<span>NEXUS</span></div>
-        <div class="node n4" onclick="show('Connect')">✈️<span>CONNECT</span></div>
-        <div class="node n5" onclick="show('IQ Test')">🧠<span>IQ TEST</span></div>
+        <div class="node n-nexus" onclick="show('Nexus')">🔮<span>NEXUS</span></div>
+        <div class="node n-connect" onclick="show('Connect')">✈️<span>CONNECT</span></div>
+        <div class="node n-iq" onclick="show('IQ Test')">🧠<span>IQ TEST</span></div>
 
-        <div class="node n6" onclick="show('Music')">
+        <div class="node n-music" onclick="show('Music')">
             <img src="music.png.png" alt="M">
             <span>MUSIC</span>
         </div>
     </div>
 
+    <div class="system-log" id="log">
+        <strong style="color:var(--glow)">SYSTEM: READY</strong><br>
+        Status: Orbital Link Stable.
+    </div>
+
     <script>
-        function show(name) { alert(name + " Node Activated"); }
+        function show(n) {
+            document.getElementById('log').innerHTML = `<strong style="color:var(--glow)">${n} NODE</strong><br>Accessing quantum data...`;
+        }
     </script>
 </body>
 </html>
